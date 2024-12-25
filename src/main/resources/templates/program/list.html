@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{program.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{program.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/programs/add}" class="btn btn-primary ms-2">[[#{program.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${!programs.empty || filter != null}" class="row">
+                <div th:replace="~{fragments/utils::searchFilter(object='program')}" />
+                <div th:replace="~{fragments/utils::sorting(object='program', sortOptions=${ {'id,ASC', 'description,ASC', 'endDate,ASC'} }, columnClass='offset-lg-4')}" />
+            </div>
+            <div th:if="${programs.empty}">[[#{program.list.empty}]]</div>
+            <div th:if="${!programs.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{program.id.label}]]</th>
+                            <th scope="col">[[#{program.description.label}]]</th>
+                            <th scope="col">[[#{program.endDate.label}]]</th>
+                            <th scope="col">[[#{program.name.label}]]</th>
+                            <th scope="col">[[#{program.noOfChapters.label}]]</th>
+                            <th scope="col">[[#{program.startDate.label}]]</th>
+                            <th scope="col">[[#{program.status.label}]]</th>
+                            <th scope="col">[[#{program.user.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="program : ${programs}">
+                            <td>[[${program.id}]]</td>
+                            <td>[[${program.description}]]</td>
+                            <td>[[${program.endDate}]]</td>
+                            <td>[[${program.name}]]</td>
+                            <td>[[${program.noOfChapters}]]</td>
+                            <td>[[${program.startDate}]]</td>
+                            <td>[[${program.status}]]</td>
+                            <td>[[${program.user}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/programs/edit/{id}(id=${program.id})}" class="btn btn-sm btn-secondary">[[#{program.list.edit}]]</a>
+                                    <form th:action="@{/programs/delete/{id}(id=${program.id})}"
+                                            th:data-confirm-message="#{delete.confirm}" method="post" class="js-submit-confirm d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{program.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

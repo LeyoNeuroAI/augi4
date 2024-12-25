@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{program.add.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{program.add.headline}]]</h1>
+                <div>
+                    <a th:href="@{/programs}" class="btn btn-secondary">[[#{program.add.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('program')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='program', field='description')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='program', field='endDate', required=true, inputClass='js-datepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='program', field='name', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='program', field='noOfChapters', required=true, type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='program', field='startDate', required=true, inputClass='js-datepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='program', field='status', type='checkbox')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='program', field='user', required=true, type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='program', field='country', required=true, type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='program', field='prompt', required=true, type='select')}" />
+                <input type="submit" th:value="#{program.add.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

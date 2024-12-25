@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{prompt.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{prompt.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/prompts/add}" class="btn btn-primary ms-2">[[#{prompt.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${!prompts.empty || filter != null}" class="row">
+                <div th:replace="~{fragments/utils::searchFilter(object='prompt')}" />
+                <div th:replace="~{fragments/utils::sorting(object='prompt', sortOptions=${ {'id,ASC', 'chapterNo,ASC', 'invisiblePrompt,ASC'} }, columnClass='offset-lg-4')}" />
+            </div>
+            <div th:if="${prompts.empty}">[[#{prompt.list.empty}]]</div>
+            <div th:if="${!prompts.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{prompt.id.label}]]</th>
+                            <th scope="col">[[#{prompt.chapterNo.label}]]</th>
+                            <th scope="col">[[#{prompt.version.label}]]</th>
+                            <th scope="col">[[#{prompt.user.label}]]</th>
+                            <th scope="col">[[#{prompt.promptProducts.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="prompt : ${prompts}">
+                            <td>[[${prompt.id}]]</td>
+                            <td>[[${prompt.chapterNo}]]</td>
+                            <td>[[${prompt.version}]]</td>
+                            <td>[[${prompt.user}]]</td>
+                            <td>[[${prompt.promptProducts}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/prompts/edit/{id}(id=${prompt.id})}" class="btn btn-sm btn-secondary">[[#{prompt.list.edit}]]</a>
+                                    <form th:action="@{/prompts/delete/{id}(id=${prompt.id})}"
+                                            th:data-confirm-message="#{delete.confirm}" method="post" class="js-submit-confirm d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{prompt.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

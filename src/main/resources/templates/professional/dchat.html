@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{professional/layout}">
+ 
+    </div> <!-- Header, navigation, etc. -->
+    <div layout:fragment="content">
+
+      <div class="container-xl">
+          
+          
+          <h1 class="mb-4">Document Upload</h1>
+       <form id="uploadForm">
+            <div class="mb-3">
+                <label for="programSelect" class="form-label">Select Program</label>
+                <select class="form-select" id="programSelect" required>
+                    <option value="">Choose a program...</option>
+                </select>
+                <div class="error" id="programError">Please select a program</div>
+            </div>
+
+          
+          
+            <div class="mb-3">
+                <label for="fileInput" class="form-label">Choose a file (PDF or DOCX, total size of all files should not exceed 10MB )</label>
+                <input class="form-control" type="file" id="fileInput" accept=".pdf,.docx" multiple required>
+                <div class="error" id="fileError">Please choose a file</div>
+            </div>
+            <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
+        </form>
+<!--        <form id="uploadForm">
+       
+                <label for="programSelect" class="form-label">Select Program</label>
+                <select class="form-select" id="programSelect" required>
+                    <option value="">Choose a program...</option>
+                </select>
+          
+
+            <h1 class="mb-4">Document Upload</h1>
+          
+                <div class="mb-3">
+                    <label for="fileInput" class="form-label">Choose a file (PDF or DOCX)</label>
+                    <input class="form-control" type="file" id="fileInput" accept=".pdf,.docx" multiple>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>-->
+            <div id="message" class="mt-3"></div>
+        </div>
+    </div>
+
+   
+
+</body>
+</html>

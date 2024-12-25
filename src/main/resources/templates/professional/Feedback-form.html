@@ -1,0 +1,114 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Pricing cards - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+    <!-- CSS files -->
+    <link href="./dist/css/tabler.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/tabler-flags.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/tabler-payments.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet"/>
+   
+    
+    <style>
+      @import url('https://rsms.me/inter/inter.css');
+      :root {
+      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+      	font-feature-settings: "cv03", "cv04", "cv11";
+      }
+
+    </style>
+
+     <header>       
+    <script src="./dist/js/demo-theme.min.js?1692870487"></script>
+    <script src="./static/js/navbar.js"></script>
+    
+    <!-- Navbar placeholders -->
+    <div id="navbar-user-placeholder"></div>
+    <div id="navigation-placeholder"></div>
+
+        <script>
+        // Load the Navbar-user
+        fetch('Navbar-user.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('navbar-user-placeholder').innerHTML = data);
+
+        // Load the navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('navigation-placeholder').innerHTML = data);
+    </script>
+    </header>
+  
+  <body>
+   <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <form class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">Feedback Form</h3>
+          </div>
+          <div class="card-body">
+            <!-- Contact Options Section -->
+            <div class="mb-3">
+              <label class="form-label required">If we would contact you, how would you like us to do that?</label>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="contactPhone">
+                <label class="form-check-label" for="contactPhone">Phone</label>
+                <input type="text" class="form-control mt-2" placeholder="Enter your phone number" id="phoneNumber">
+              </div>
+              <div class="form-check mt-3">
+                <input type="checkbox" class="form-check-input" id="contactEmail">
+                <label class="form-check-label" for="contactEmail">Email</label>
+                <input type="email" class="form-control mt-2" placeholder="Enter your email" id="emailAddress">
+              </div>
+              <div class="form-check mt-3">
+                <input type="checkbox" class="form-check-input" id="contactWhatsapp">
+                <label class="form-check-label" for="contactWhatsapp">WhatsApp</label>
+                <input type="text" class="form-control mt-2" placeholder="Enter your WhatsApp number" id="whatsappNumber">
+              </div>
+            </div>
+            <!-- Feedback Section -->
+            <div class="mb-3">
+              <label class="form-label required">Feedback is a gift. Let us know what is on your mind.</label>
+              <textarea class="form-control" rows="4" placeholder="Please describe the matter or leave your feedback here"></textarea>
+            </div>
+           <!-- Experience Slider Section -->
+            <div class="mb-3">
+              <label for="experienceSlider" class="form-label">How would you rate your experience so far?</label>
+              <h5 style="font-style: italic; color: #b0b0b0;">Left is worst, Right is best</h5>
+            <input type="range" class="form-range" min="1" max="10" id="experienceSlider">
+            </div>
+          </div>
+          <div class="card-footer text-end">
+            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+                  <!-- Footer placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="./dist/js/tabler.min.js?1692870487" defer></script>
+    <script src="./dist/js/demo.min.js?1692870487" defer></script>
+
+    <script>
+        // Load the footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer-placeholder').innerHTML = data);
+    </script>
+
+      
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

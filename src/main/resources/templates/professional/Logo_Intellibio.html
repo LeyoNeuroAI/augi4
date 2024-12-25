@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntelliBio Logo Page</title>
+    <style>
+        body {
+            background-color: transparent;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+        }
+
+        .logo-container a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-container img {
+            max-height: 200%;
+            height: 2rem; /* Ensures logo is appropriately sized for text */
+            width: auto; /* Keep aspect ratio of the logo */
+            margin-right: 0.1em; /* Space between the logo and the text */
+        }
+
+        .logo-text {
+            font-size: 1.1rem; /* Text size to match the logo */
+            font-weight: 400; /* Regular font weight */
+            line-height: 1; /* Consistent vertical alignment */
+        }
+
+        /* Ensure that parent containers do not override desired sizing */
+        .navbar, .container-xl {
+            height: auto; /* Remove any height restrictions */
+            overflow: visible; /* Prevent content overflow issues */
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <a href="https://www.intellibio.tech" target="_blank" title="Visit IntelliBio.tech">
+            <img src="./static/Intellibio_logo.png" alt="IntelliBio Logo">
+            <span class="logo-text">IntelliBio</span>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{home.index.headline}]]</title>
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <h1 class="mb-4">[[#{home.index.headline}]]</h1>
+            <p>[(#{home.index.text})]</p>
+            <p class="mb-5">
+                <span>[[#{home.index.swagger}]]</span>
+                <a th:href="@{/swagger-ui.html}" target="_blank">[[#{home.index.swagger.link}]]</a>.
+            </p>
+            <div class="col-md-4 mb-5">
+                <h4 class="mb-3">[[#{home.index.exploreEntities}]]</h4>
+                <div class="list-group">
+                    <a th:href="@{/chatMessages}" class="list-group-item list-group-item-action">[[#{chatMessage.list.headline}]]</a>
+                    <a th:href="@{/chatSessions}" class="list-group-item list-group-item-action">[[#{chatSession.list.headline}]]</a>
+                    <a th:href="@{/countries}" class="list-group-item list-group-item-action">[[#{country.list.headline}]]</a>
+                    <a th:href="@{/documents}" class="list-group-item list-group-item-action">[[#{document.list.headline}]]</a>
+                    <a th:href="@{/feedbacks}" class="list-group-item list-group-item-action">[[#{feedback.list.headline}]]</a>
+                    <a th:href="@{/plans}" class="list-group-item list-group-item-action">[[#{plan.list.headline}]]</a>
+                    <a th:href="@{/products}" class="list-group-item list-group-item-action">[[#{product.list.headline}]]</a>
+                    <a th:href="@{/programs}" class="list-group-item list-group-item-action">[[#{program.list.headline}]]</a>
+                    <a th:href="@{/projects}" class="list-group-item list-group-item-action">[[#{project.list.headline}]]</a>
+                    <a th:href="@{/projectFiles}" class="list-group-item list-group-item-action">[[#{projectFile.list.headline}]]</a>
+                    <a th:href="@{/prompts}" class="list-group-item list-group-item-action">[[#{prompt.list.headline}]]</a>
+                    <a th:href="@{/roles}" class="list-group-item list-group-item-action">[[#{role.list.headline}]]</a>
+                    <a th:href="@{/users}" class="list-group-item list-group-item-action">[[#{user.list.headline}]]</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

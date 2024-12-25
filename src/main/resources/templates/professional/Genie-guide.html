@@ -1,0 +1,241 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta20
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Intellibio</title>
+    
+    <!-- CSS files -->
+    <link href="./dist/css/tabler.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/tabler-flags.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/tabler-payments.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet"/>
+    
+    <style>
+      @import url('https://rsms.me/inter/inter.css');
+      :root {
+      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+      	font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+    
+</head>
+<body>
+        <header>       
+    <script src="./dist/js/demo-theme.min.js?1692870487"></script>
+    <script src="./static/js/navbar.js"></script>
+    
+    <!-- Navbar placeholders -->
+    <div id="navbar-user-placeholder"></div>
+    <div id="navigation-placeholder"></div>
+
+        <script>
+        // Load the Navbar-user
+        fetch('Navbar-user.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('navbar-user-placeholder').innerHTML = data);
+
+        // Load the navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('navigation-placeholder').innerHTML = data);
+    </script>
+    </header>
+
+    <main>
+        
+        <div class="page-wrapper">
+  <!-- Page header -->
+  <div class="page-header d-print-none">
+    <div class="container-xl">
+      <div class="row g-2 align-items-center">
+        <div class="col">
+          <!-- Page pre-title -->
+          <div class="page-pretitle">
+            Guide
+          </div>
+          <h2 class="page-title">
+           Grant Genie: Your AI-Powered European Grant Writing Assistant
+          </h2>
+        </div>
+        <section class="section-content">
+
+            <p>Welcome to Grant Genie, your expert AI assistant for streamlining the grant writing process, with a focus on European grants. Grant Genie supports major EU funding programs such as ERC, Eurostars, and Horizon Europe, and we are rapidly expanding our support for more programs.</p>
+
+            <p>Grant Genie ensures you're always in control, keeping a human-in-the-loop approach that aligns with the expectations of funding bodies. This guide will walk you through how to use Grant Genie effectively, from generating proposals to refining applications.</p>
+
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction">Introduction to Grant Genie</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#grant-project-workspace">Grant Project Workspace</a></li>
+                <li><a href="#best-practices">Best Practices for Success</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#support">Support</a></li>
+            </ul>
+
+            <h2 id="introduction">1. Introduction to Grant Genie</h2>
+            <p>Grant Genie is designed to assist researchers, startups, and organizations with writing grant proposals for European programs. Currently, we support:</p>
+            <ul>
+                <li>ERC (European Research Council)</li>
+                <li>Eurostars</li>
+                <li>Horizon Europe</li>
+            </ul>
+
+            <p>Our system ensures you stay in the driver’s seat by giving you full control over the content and flow of your grant submissions. While Grant Genie helps you draft, refine, and improve grant proposals, users are always in control, keeping the process human-driven. This aligns with the rigorous expectations of European funding bodies.</p>
+
+            <p>Additionally, Grant Genie integrates with Grant Genius, an interactive chatbot designed to assist with any questions about the grant programs we support. Grant Genius can provide quick guidance on European Union grants and clarify specific funding criteria, ensuring you always have access to relevant advice during the proposal process.</p>
+
+            <h2 id="getting-started">2. Getting Started</h2>
+            <h3>Step 1: Accessing Grant Genie</h3>
+            <p>To start using Grant Genie:</p>
+            <ul>
+                <li>Log in to your IntelliBio account or create a new one.</li>
+                <li>Navigate to the Grant Genie section in the dashboard.</li>
+                <li>Set up your profile by adding your organization's details, research interests, and project scope.</li>
+            </ul>
+            <p><strong>Note:</strong> You do not need to specify the types of grants you pursue, as you will select the specific grant for each new project.</p>
+
+            <h3>Step 2: Payment Setup</h3>
+            <p>Once you've chosen the grant program you wish to develop a proposal for, you will be prompted to complete the payment process. <strong>Payment grants access to Grant Genie for the development of one application</strong>. You can proceed with another application by starting a new project and completing the payment for that specific proposal.</p>
+
+            <h2 id="grant-project-workspace">3. Grant Project Workspace</h2>
+            <p>The Grant Project Workspace is designed to streamline the process of drafting and refining your grant application. The workspace is divided into intuitive sections to help you organize, write, and refine each part of your grant proposal efficiently.</p>
+
+            <h3>Workspace Layout</h3>
+
+            <h4>1. Left Panel: Grant Components</h4>
+            <p>The left panel provides an overview of all the major components of your grant, broken down into chapters and subchapters. This clickable panel allows you to navigate the sections you need to work on.</p>
+            <ul>
+                <li><strong>Chapters and Subchapters:</strong> Displayed in a clear hierarchy, you can click on any chapter to begin working on it.</li>
+                <li><strong>Progress Indicators:</strong> Each chapter shows a progress indicator, so you can see which sections are complete, in progress, or yet to be started.</li>
+            </ul>
+
+            <h4>2. Center Panel: Grant Content</h4>
+            <p>When you select a chapter or subchapter from the left panel, the center panel will display the content for that section. This is where you will review, edit, and refine the draft generated by Grant Genie.</p>
+            <ul>
+                <li><strong>Live Content Editor:</strong> Once the AI draft is generated, you can manually edit the content in this panel.</li>
+                <li><strong>Add to Editor:</strong> After Grant Genie drafts a chapter, you can click "Add to Editor" to bring the generated content into the center panel for further review and edits.</li>
+                <li><strong>Real-Time Updates:</strong> Any changes you make are saved in real-time as you work through each chapter.</li>
+            </ul>
+
+            <h4>3. Right Panel: Chat with Grant Genie</h4>
+            <p>The right panel contains the chat interface with Grant Genie, where you will interact with the AI to generate and refine the content for each chapter.</p>
+            <ul>
+                <li><strong>Pre-Structured Prompts:</strong> A list of user prompts designed to guide you through each chapter. Clicking a prompt will run the chat with Grant Genie, starting the process of generating the selected chapter.</li>
+                <li><strong>Interactive Chat:</strong> Grant Genie will ask a series of clarifying questions to help refine the draft. Typically, this happens in three rounds, but you can request drafts earlier if needed.</li>
+                <li><strong>Refinement Options:</strong> After each draft, you can provide more information or instructions to further improve the chapter.</li>
+            </ul>
+
+            <h3>Process: Step-by-Step</h3>
+
+            <h4>1. Chat with Grant Genie</h4>
+            <p>Begin by chatting with Grant Genie about your project. The chat will ask targeted questions to gather necessary details about your project. These details help build the foundational structure for the proposal.</p>
+
+            <h4>2. Work on Individual Chapters</h4>
+            <p>Navigate to the left panel to select a chapter or subchapter you’d like to work on. Once selected:</p>
+            <ul>
+                <li><strong>Step 1:</strong> Grant Genie will ask clarifying questions about that chapter, such as the objectives, outcomes, and specific details required by the grant.</li>
+                <li><strong>Step 2:</strong> Based on your responses, Grant Genie will generate a draft for the chapter. You can either:</li>
+                <ul>
+                    <li>Review and edit it in the chat panel or</li>
+                    <li>Click "Add to Editor" to work on it in the center panel.</li>
+                </ul>
+                <li><strong>Step 3:</strong> If the draft needs improvement, you can provide additional information and instructions to refine it further. Grant Genie will adjust the chapter based on your feedback in real-time.</li>
+            </ul>
+
+            <h4>3. Refine and Edit</h4>
+            <p>Once a chapter is generated, you can:</p>
+            <ul>
+                <li><strong>Refine the Chapter:</strong> Provide more details or ask for alternative phrasing within the chat.</li>
+                <li><strong>Edit Manually:</strong> Manually edit the text by adding the generated draft to the editor. Once it’s in the editor, you can make detailed edits to meet your specific goals.</li>
+            </ul>
+
+            <h4>4. Save Each Chapter</h4>
+            <p>After working through the chapter with Grant Genie and refining it to your satisfaction:</p>
+            <ul>
+                <li><strong>Save the Chapter:</strong> Click "Save" to store your changes and mark the chapter as complete. The progress indicator in the left panel will update accordingly.</li>
+                <li><strong>Move to the Next Chapter:</strong> Once a chapter is completed, select the next chapter in the left panel and repeat the process.</li>
+            </ul>
+
+            <h4>5. Export Your Grant Application</h4>
+            <p>When all chapters are completed and saved:</p>
+            <ul>
+                <li><strong>Save and Export:</strong> Click the "Save and Export" button to generate a full version of your grant proposal in the required format (PDF, Word, etc.).</li>
+                <li><strong>Final Review:</strong> Before exporting, run a final check to ensure all sections meet the specific guidelines of the selected funding program.</li>
+            </ul>
+
+            <h2 id="best-practices">4. Best Practices for Success</h2>
+            <p>To get the most out of Grant Genie:</p>
+            <ul>
+                <li><strong>Refine proposals early:</strong> Use Grant Genie to generate early drafts, giving yourself plenty of time for manual edits and revisions.</li>
+                <li><strong>Focus on compliance:</strong> Ensure your proposal aligns with the specific requirements and guidelines of the EU grant program you're applying for.</li>
+                <li><strong>Leverage the chatbot:</strong> Use Grant Genius to ask questions or clarify parts of the grant programs supported by Grant Genie.</li>
+            </ul>
+
+            <h2 id="faq">5. FAQ</h2>
+
+            <div class="faq-item">
+                <h3>What grants does Grant Genie support?</h3>
+                <p>Grant Genie currently supports European grants, including ERC, Eurostars, and Horizon Europe, with plans to expand to other EU grants.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How does Grant Genius work?</h3>
+                <p>Grant Genius is an interactive chatbot that provides real-time assistance on grant programs. It can answer questions related to ERC, Eurostars, and Horizon Europe, and clarify any aspects of the grant writing process.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Do I remain in control of my proposals?</h3>
+                <p>Yes. Grant Genie provides suggestions and drafts, but you are always in control of edits, ensuring your application meets the specific expectations of funding bodies.</p>
+            </div>
+
+            <h2 id="support">6. Support</h2>
+            <p>For assistance with Grant Genie, please reach out to our support team at <a href="mailto:support@intellibio.tech">support@intellibio.tech</a> or visit the help section in your account dashboard for further guidance.</p>
+        </section>
+    </main>
+
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const currentPath = window.location.pathname;
+
+        navLinks.forEach(link => {
+            if (link.pathname === currentPath) {
+                link.classList.add('active');
+                link.setAttribute('aria-current', 'page');
+            }
+        });
+    </script>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    
+               <!-- Footer placeholder -->
+    <div id="footer-placeholder"></div>
+      </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="./dist/js/tabler.min.js?1692870487" defer></script>
+    <script src="./dist/js/demo.min.js?1692870487" defer></script>
+
+    <script>
+        // Load the footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer-placeholder').innerHTML = data);
+    </script>
+
+</body>
+</html>

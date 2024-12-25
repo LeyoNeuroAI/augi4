@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{document.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{document.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/documents/add}" class="btn btn-primary ms-2">[[#{document.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${!documents.empty || filter != null}" class="row">
+                <div th:replace="~{fragments/utils::searchFilter(object='document')}" />
+                <div th:replace="~{fragments/utils::sorting(object='document', sortOptions=${ {'id,ASC', 'content,ASC', 'embedding,ASC'} }, columnClass='offset-lg-4')}" />
+            </div>
+            <div th:if="${documents.empty}">[[#{document.list.empty}]]</div>
+            <div th:if="${!documents.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{document.id.label}]]</th>
+                            <th scope="col">[[#{document.embedding.label}]]</th>
+                            <th scope="col">[[#{document.sessionId.label}]]</th>
+                            <th scope="col">[[#{document.user.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="document : ${documents}">
+                            <td>[[${document.id}]]</td>
+                            <td>[[${document.embedding}]]</td>
+                            <td>[[${document.sessionId}]]</td>
+                            <td>[[${document.user}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/documents/edit/{id}(id=${document.id})}" class="btn btn-sm btn-secondary">[[#{document.list.edit}]]</a>
+                                    <form th:action="@{/documents/delete/{id}(id=${document.id})}"
+                                            th:data-confirm-message="#{delete.confirm}" method="post" class="js-submit-confirm d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{document.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

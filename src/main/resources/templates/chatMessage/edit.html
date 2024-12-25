@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{chatMessage.edit.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{chatMessage.edit.headline}]]</h1>
+                <div>
+                    <a th:href="@{/chatMessages}" class="btn btn-secondary">[[#{chatMessage.edit.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('chatMessage')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='chatMessage', field='id', disabled=true, type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='chatMessage', field='message', required=true, type='textarea')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='chatMessage', field='tokens', type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='chatMessage', field='chapter', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='chatMessage', field='session', required=true, type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='chatMessage', field='project', type='select')}" />
+                <input type="submit" th:value="#{chatMessage.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

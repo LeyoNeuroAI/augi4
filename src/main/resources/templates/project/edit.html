@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{project.edit.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{project.edit.headline}]]</h1>
+                <div>
+                    <a th:href="@{/projects}" class="btn btn-secondary">[[#{project.edit.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('project')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='project', field='id', disabled=true, type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='project', field='file')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='project', field='goal', required=true, type='textarea')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='project', field='name', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='project', field='organisationName', required=true, type='textarea')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='project', field='status', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='project', field='summary', required=true, type='textarea')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='project', field='user', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='project', field='progam', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='project', field='project1', type='select')}" />
+                <input type="submit" th:value="#{project.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

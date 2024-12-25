@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{loginLayout}">
+    <head>
+        <title>[[#{registration.register.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <h1 class="mb-4">[[#{registration.register.headline}]]</h1>
+            <div th:replace="~{fragments/forms::globalErrors('registrationRequest')}" />
+            <form th:action="${requestUri}" method="post">
+                                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='name', required=true)}" />
+
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='email', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='password', required=true, type='password')}" />
+                                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='organisation', required=true)}" />
+
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='refer')}" />
+                <div  class="row mb-3" >
+        <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='terms', type='checkbox')}" />
+         <div class="col-md-2 offset-md-2"> 
+        <a th:href="@{/professional/terms}" target="_blank">Terms and Conditions</a>
+        </div>
+                </div>
+                    <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='plan', required=true, type='select')}" />
+
+    
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='country', required=true, type='select')}" />
+                <input type="submit" th:value="#{registration.register.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

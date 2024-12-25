@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{chatMessage.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{chatMessage.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/chatMessages/add}" class="btn btn-primary ms-2">[[#{chatMessage.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${chatMessages.empty}">[[#{chatMessage.list.empty}]]</div>
+            <div th:if="${!chatMessages.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{chatMessage.id.label}]]</th>
+                            <th scope="col">[[#{chatMessage.tokens.label}]]</th>
+                            <th scope="col">[[#{chatMessage.chapter.label}]]</th>
+                            <th scope="col">[[#{chatMessage.session.label}]]</th>
+                            <th scope="col">[[#{chatMessage.project.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="chatMessage : ${chatMessages}">
+                            <td>[[${chatMessage.id}]]</td>
+                            <td>[[${chatMessage.tokens}]]</td>
+                            <td>[[${chatMessage.chapter}]]</td>
+                            <td>[[${chatMessage.session}]]</td>
+                            <td>[[${chatMessage.project}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/chatMessages/edit/{id}(id=${chatMessage.id})}" class="btn btn-sm btn-secondary">[[#{chatMessage.list.edit}]]</a>
+                                    <form th:action="@{/chatMessages/delete/{id}(id=${chatMessage.id})}"
+                                            th:data-confirm-message="#{delete.confirm}" method="post" class="js-submit-confirm d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{chatMessage.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

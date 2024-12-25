@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{chatSession.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{chatSession.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/chatSessions/add}" class="btn btn-primary ms-2">[[#{chatSession.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${!chatSessions.empty || filter != null}" class="row">
+                <div th:replace="~{fragments/utils::searchFilter(object='chatSession')}" />
+                <div th:replace="~{fragments/utils::sorting(object='chatSession', sortOptions=${ {'id,ASC', 'sessionId,ASC', 'tokenCount,ASC'} }, columnClass='offset-lg-4')}" />
+            </div>
+            <div th:if="${chatSessions.empty}">[[#{chatSession.list.empty}]]</div>
+            <div th:if="${!chatSessions.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{chatSession.id.label}]]</th>
+                            <th scope="col">[[#{chatSession.sessionId.label}]]</th>
+                            <th scope="col">[[#{chatSession.tokenCount.label}]]</th>
+                            <th scope="col">[[#{chatSession.product.label}]]</th>
+                            <th scope="col">[[#{chatSession.user.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="chatSession : ${chatSessions}">
+                            <td>[[${chatSession.id}]]</td>
+                            <td>[[${chatSession.sessionId}]]</td>
+                            <td>[[${chatSession.tokenCount}]]</td>
+                            <td>[[${chatSession.product}]]</td>
+                            <td>[[${chatSession.user}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/chatSessions/edit/{id}(id=${chatSession.id})}" class="btn btn-sm btn-secondary">[[#{chatSession.list.edit}]]</a>
+                                    <form th:action="@{/chatSessions/delete/{id}(id=${chatSession.id})}"
+                                            th:data-confirm-message="#{delete.confirm}" method="post" class="js-submit-confirm d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{chatSession.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

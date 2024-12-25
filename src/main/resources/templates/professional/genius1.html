@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+
+
+    <head>
+    <title>[[#{professional.genius.headline}]]</title>
+</head>
+    <body>
+        
+   
+ <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{professional.genius.headline}]]</h1>
+               
+            </div>
+ </div>
+        
+          <div th:replace="~{fragments/forms::globalErrors('geniusMessage')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='geniusMessage', field='message', required=true, type='textarea')}" />
+            
+                <input type="submit" th:value="#{professional.genius.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+</body>
+</html>
