@@ -160,17 +160,9 @@ public class ProMessageController {
         
          Prompt prompts = promptRepository.findFirstByPromptProducts(product);
          
-         System.out.println(prompts.getVisiblePrompt());
-         
         
-
-        //List<Prompt> prompts = geniusService.getPromptsByProductName(name);
-//        List<String> prompts = Arrays.asList(
-//                "This is the first prompt.",
-//                "This is the second prompt.",
-//                "This is the third prompt.",
-//                "This is the fourth prompt."
-//        );
+         
+   
 
         model.addAttribute("currentSessionId", sessionId );
         model.addAttribute("prompts", prompts.getVisiblePrompt());
@@ -194,59 +186,28 @@ public class ProMessageController {
 
         ChatSession newSession = claudeService.createNewSession(product, user, 0, sessionId);
         
-       
+      
 
-        // Retrieve the user's chat sessions
-        List<ChatSession> chatSessions = chatSessionRepository.findByUser(user)
-                .stream()
-                .sorted(Comparator.comparing(ChatSession::getDateCreated).reversed())
-                .limit(10)
-                .collect(Collectors.toList());
+        Prompt prompts = promptRepository.findFirstByPromptProducts(product);
 
-        //List<Prompt> prompts = geniusService.getPromptsByProductName(name);
-        List<String> prompts = Arrays.asList(
-                "This is the first prompt.",
-                "This is the second prompt.",
-                "This is the third prompt.",
-                "This is the fourth prompt."
-        );
 
         model.addAttribute("currentSessionId", sessionId);
-        model.addAttribute("prompts", prompts);
+        model.addAttribute("prompts", prompts.getVisiblePrompt());
         // Add the chat sessions to the model
-        model.addAttribute("chatSessions", chatSessions);
+       
 
         return "professional/genius";
     }
 
-//    @GetMapping("/genius/{name}/history")
-//    public String getChat(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-//
-//        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
-//        // Retrieve the user's chat sessions
-//        List<ChatSession> chatSessions = chatSessionRepository.findByUser(user)
-//                .stream()
-//                .sorted(Comparator.comparing(ChatSession::getDateCreated).reversed())
-//                .limit(10)
-//                .collect(Collectors.toList());
-//
-//        List<String> prompts = Arrays.asList(
-//                "This is the first prompt.",
-//                "This is the second prompt.",
-//                "This is the third prompt.",
-//                "This is the fourth prompt."
-//        );
-//
-//        model.addAttribute("prompts", prompts);
-//        // Add the chat sessions to the model
-//        model.addAttribute("chatSessions", chatSessions);
-//        return "professional/geniusHistory";
-//    }
+
 
     @GetMapping("/genius/{name}/{id}")
     public String getChatWindow(@PathVariable("id") String chatSessionId, @PathVariable("name") String name, Model model,
             @AuthenticationPrincipal UserDetails userDetails) {
         ChatSession chatsession = chatSessionRepository.findBySessionId(chatSessionId);
+        
+         Product product = productRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
         
         String currentSessionId = chatSessionId;
 
@@ -278,16 +239,12 @@ public class ProMessageController {
                 .limit(10)
                 .collect(Collectors.toList());
 
-        List<String> prompts = Arrays.asList(
-                "This is the first prompt.",
-                "This is the second prompt.",
-                "This is the third prompt.",
-                "This is the fourth prompt."
-        );
+               Prompt prompts = promptRepository.findFirstByPromptProducts(product);
+
         
         model.addAttribute("currentSessionId", currentSessionId );
 
-        model.addAttribute("prompts", prompts);
+        model.addAttribute("prompts", prompts.getVisiblePrompt());
         // Add the chat sessions to the model
         model.addAttribute("chatSessions", chatSessions);
 

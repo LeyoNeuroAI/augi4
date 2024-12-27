@@ -82,28 +82,28 @@
                                 </div>
 
                             </div>
-                            
-                             <div class="card-header d-none d-md-block">
+
+                            <div class="card-header d-none d-md-block">
                                 <div class="input-icon">
 
                                     <form th:action="@{/professional/genius/GrantGenius/{id}(id=${currentSessionId})}" method="get" class="dropdown-item">
 
 
-                                        <button class="btn "  type="submit" id="new-chat-btn">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                                            <path d="M9 12h6" />
-                                            <path d="M12 9v6" />
+                                        <button class="btn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-history" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <circle cx="12" cy="12" r="9" />
+                                            <path d="M12 7v5l3 3" />
                                             </svg>
                                             History
                                         </button>
+
                                     </form>
 
                                 </div>
 
                             </div>
-                        
+
                         </div>
                         <div class="col-12 col-lg-7 col-xl-9 d-flex flex-column">
                             <div class="card-body scrollable" style="height: 35rem">
@@ -127,9 +127,9 @@
 
 
                                                             <div class="chat-buttons" th:if="${prompts != null and !#lists.isEmpty(prompts)}">
-                                                                
-                                                                    <button  th:each="prompt : ${prompts}" class="btn prompt-btn" th:text="${prompt}"></button>
-                                                               
+
+                                                                <button  th:each="prompt : ${prompts}" class="btn prompt-btn" th:text="${prompt}"></button>
+
                                                             </div>
 
 
@@ -139,8 +139,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                    
+
+
 
                                     </div>
                                 </div>

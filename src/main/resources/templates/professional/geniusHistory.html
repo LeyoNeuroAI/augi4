@@ -116,14 +116,14 @@
                                                             </div>
                                                         </div>
                                                         <div class="chat-bubble-body">
-                                                            <p id="chat-message" style="white-space: pre-wrap;">Please select a message </p>
+                                                            <p id="chat-message" style="white-space: pre-wrap;">Hello How can I assist you? </p>
 
 
 
-                                                            <div class="chat-buttons" th:if="${chatMessages != null and !#lists.isEmpty(chatMessages)}">
-                                                                <span th:each="message : ${chatMessages}">
-                                                                    <button class="btn prompt-btn" th:text="${message.prompt}"></button>
-                                                                </span>
+                                                               <div class="chat-buttons" th:if="${prompts != null and !#lists.isEmpty(prompts)}">
+
+                                                                <button  th:each="prompt : ${prompts}" class="btn prompt-btn" th:text="${prompt}"></button>
+
                                                             </div>
 
 
@@ -137,11 +137,36 @@
 
 
                                         <!--- chat history -->
+                                        
+                                        
+                                         <div class="chat-item" th:each="chat : ${chathistory}">
+                                            <div class="row align-items-end">
+                                                <div class="col col-lg-12">
+                                                    <div class="chat-bubble chat-bubble-me">
+                                                        <div class="chat-bubble-title">
+                                                            <div class="row">
+                                                                <div class="col chat-bubble-author" th:text="${chat.role}"></div>
 
-                                        <div th:each="chat : ${chathistory}">
-                                            <div th:text="${chat.role}">Role</div>
-                                            <div th:text="${chat.content}">Content</div>
-                                        </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="chat-bubble-body">
+                                                            <p id="chat-message" style="white-space: pre-wrap;" th:text="${chat.content}" > </p>
+
+
+
+
+                                                            </div>
+
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                       
+
+                                     
 
 
 
