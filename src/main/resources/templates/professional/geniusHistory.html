@@ -82,28 +82,22 @@
                                 </div>
 
                             </div>
-                            
-                             <div class="card-header d-none d-md-block">
-                                <div class="input-icon">
+                            <div class="card-body p-0 scrollable" style="max-height: 35rem">
+                                <div class="nav flex-column nav-pills" role="tablist">
 
-                                    <form th:action="@{/professional/genius/GrantGenius/{id}(id=${currentSessionId})}" method="get" class="dropdown-item">
+                                    <a th:each="chatSession : ${chatSessions}" th:href="@{/professional/genius/GrantGenius/{id}(id=${chatSession.sessionId})}" class="nav-link text-start mw-100 p-3 custom-link" th:id="'chat-' + ${chatSession.id} + '-tab'" data-bs-toggle="pill" role="tab" aria-selected="true">
+                                        <div class="row align-items-center flex-fill">
+                                            <div class="col text-body">
+                                                <div th:text="${chatSession.id}"></div>
+                                                <div class="text-secondary text-truncate w-100" ></div>
+                                            </div>
+                                        </div>
+                                    </a>
 
 
-                                        <button class="btn "  type="submit" id="new-chat-btn">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                                            <path d="M9 12h6" />
-                                            <path d="M12 9v6" />
-                                            </svg>
-                                            History
-                                        </button>
-                                    </form>
 
                                 </div>
-
                             </div>
-                        
                         </div>
                         <div class="col-12 col-lg-7 col-xl-9 d-flex flex-column">
                             <div class="card-body scrollable" style="height: 35rem">
@@ -122,14 +116,14 @@
                                                             </div>
                                                         </div>
                                                         <div class="chat-bubble-body">
-                                                            <p id="chat-message" style="white-space: pre-wrap;">Hello, How can I assist you? </p>
+                                                            <p id="chat-message" style="white-space: pre-wrap;">Please select a message </p>
 
 
 
-                                                            <div class="chat-buttons" th:if="${prompts != null and !#lists.isEmpty(prompts)}">
-                                                                
-                                                                    <button  th:each="prompt : ${prompts}" class="btn prompt-btn" th:text="${prompt}"></button>
-                                                               
+                                                            <div class="chat-buttons" th:if="${chatMessages != null and !#lists.isEmpty(chatMessages)}">
+                                                                <span th:each="message : ${chatMessages}">
+                                                                    <button class="btn prompt-btn" th:text="${message.prompt}"></button>
+                                                                </span>
                                                             </div>
 
 
@@ -138,9 +132,21 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
-                                        
-                    
+
+
+                                        <!--- chat history -->
+
+                                        <div th:each="chat : ${chathistory}">
+                                            <div th:text="${chat.role}">Role</div>
+                                            <div th:text="${chat.content}">Content</div>
+                                        </div>
+
+
+
+
+                                        <!--- chat history -->
 
                                     </div>
                                 </div>

@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const chatContainer = document.getElementById('chat-container');
 //const chatContainer = document.querySelector(".chat-bubbles");
     const messageInput = document.getElementById("message-input");
+
+    // Get the button element
+
+    const sessionInput = document.getElementById("sessionInput");
     let currentAssistantMessage = null;
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -11,7 +15,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     submitButton.addEventListener('click', sendMessage); // Add event listener
 
- // Function to add clicked button text to message-input
+   
+document.querySelectorAll('.custom-link').forEach(function(link) {
+    link.addEventListener('click', function(event) {
+        event.preventDefault();
+        window.location.href = this.href;
+    });
+});
+
+
+
+
+    // Function to add clicked button text to message-input
     function addButtonTextToInput() {
         document.querySelectorAll('.prompt-btn').forEach(button => {
             button.addEventListener('click', () => {
@@ -20,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-   addButtonTextToInput();
+    addButtonTextToInput();
 
 
     function addMessage(message, author = "You") {
@@ -49,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    function addChatMessageGG(message="Hello How can I assist you", author = "Grant Genius", prompts = []) {
+    function addChatMessageGG(message = "Hello How can I assist you", author = "Grant Genius", prompts = []) {
         const chatItem = document.createElement("div");
         chatItem.classList.add("chat-item");
 
@@ -118,7 +133,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function sendMessage() {
 
-        const sessionId = '111s';
+        const sessionId = sessionInput.value;
+        console.log(sessionId);
         const message = messageInput.value.trim();
         if (!message)
             return;
@@ -137,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
             currentAssistantMessage.textContent += event.data + ' ';
             chatContainer.scrollTop = chatContainer.scrollHeight;
         };
-        
+
 
 
 

@@ -3,6 +3,8 @@
         layout:decorate="~{layout}">
     <head>
         <title>[[#{prompt.edit.headline}]]</title>
+                <script th:src="@{/js/promptList.js}" defer></script>
+
     </head>
     <body>
         <div layout:fragment="content">
@@ -13,13 +15,17 @@
                 </div>
             </div>
             <div th:replace="~{fragments/forms::globalErrors('prompt')}" />
-            <form th:action="${requestUri}" method="post">
+            <form th:action="${requestUri}" method="post" id="myForm">
                 <div th:replace="~{fragments/forms::inputRow(object='prompt', field='id', disabled=true, type='number')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='prompt', field='chapterNo', required=true, type='number')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='prompt', field='invisiblePrompt', required=true, type='textarea')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='prompt', field='systemPrompt', required=true, type='textarea')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='prompt', field='version', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='prompt', field='visiblePrompt', required=true, type='textarea')}" />
+                    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Enter a visible prompt item" id="visiblePromptInput">
+        <button class="btn btn-primary" type="button" id="addVisiblePrompt">Add to Visible Prompt</button>
+    </div>
+    <ul class="list-group" id="visiblePromptList"></ul>
                 <div th:replace="~{fragments/forms::inputRow(object='prompt', field='user', type='select')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='prompt', field='promptProducts', required=true, type='select')}" />
                 <input type="submit" th:value="#{prompt.edit.headline}" class="btn btn-primary mt-4" />

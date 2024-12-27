@@ -16,6 +16,6 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Intege
 
     ChatMessage findFirstByProject(Project project);
     
- ChatMessage findBySession(ChatSession chatSession);
+ Optional <ChatMessage> findBySession(ChatSession chatSession);
 
 }

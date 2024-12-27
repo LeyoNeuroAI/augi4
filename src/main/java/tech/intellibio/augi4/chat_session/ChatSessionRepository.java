@@ -1,5 +1,6 @@
 package tech.intellibio.augi4.chat_session;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,9 @@ public interface ChatSessionRepository extends JpaRepository<ChatSession, Intege
 
     ChatSession findFirstByUser(User user);
     
-   Optional <ChatSession> findBySessionId (String sessionId);
+    List <ChatSession> findByUser(User user);
+    
+  ChatSession findBySessionId (String sessionId);
                 
 
 }
