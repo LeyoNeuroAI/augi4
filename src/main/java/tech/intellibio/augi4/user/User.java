@@ -99,8 +99,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Feedback> userFeedbacks;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Prompt> userPrompts;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
@@ -260,13 +259,7 @@ public class User {
         this.userFeedbacks = userFeedbacks;
     }
 
-    public Set<Prompt> getUserPrompts() {
-        return userPrompts;
-    }
-
-    public void setUserPrompts(final Set<Prompt> userPrompts) {
-        this.userPrompts = userPrompts;
-    }
+   
 
     public Role getRole() {
         return role;

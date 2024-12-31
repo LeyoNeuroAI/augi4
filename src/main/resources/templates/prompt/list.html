@@ -24,8 +24,7 @@
                             <th scope="col">[[#{prompt.id.label}]]</th>
                             <th scope="col">[[#{prompt.chapterNo.label}]]</th>
                             <th scope="col">[[#{prompt.version.label}]]</th>
-                            <th scope="col">[[#{prompt.user.label}]]</th>
-                            <th scope="col">[[#{prompt.promptProducts.label}]]</th>
+                            <th scope="col">[[#{prompt.program.label}]]</th>
                             <th><!-- --></th>
                         </tr>
                     </thead>
@@ -34,8 +33,7 @@
                             <td>[[${prompt.id}]]</td>
                             <td>[[${prompt.chapterNo}]]</td>
                             <td>[[${prompt.version}]]</td>
-                            <td>[[${prompt.user}]]</td>
-                            <td>[[${prompt.promptProducts}]]</td>
+                            <td>[[${prompt.program}]]</td>
                             <td>
                                 <div class="float-end text-nowrap">
                                     <a th:href="@{/prompts/edit/{id}(id=${prompt.id})}" class="btn btn-sm btn-secondary">[[#{prompt.list.edit}]]</a>

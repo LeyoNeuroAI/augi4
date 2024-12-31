@@ -14,8 +14,9 @@
             </div>
             <div th:replace="~{fragments/forms::globalErrors('product')}" />
             <form th:action="${requestUri}" method="post">
-                <div th:replace="~{fragments/forms::inputRow(object='product', field='description')}" />
+                      <div th:replace="~{fragments/forms::inputRow(object='product', field='description')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='product', field='name', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='product', field='prompt', required=true, type
                 <input type="submit" th:value="#{product.add.headline}" class="btn btn-primary mt-4" />
             </form>
         </div>

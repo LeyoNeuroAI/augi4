@@ -34,10 +34,6 @@ public class ProgramDTO {
     @NotNull
     private Long country;
 
-    @NotNull
-    @ProgramPromptUnique
-    private Long prompt;
-
     public Long getId() {
         return id;
     }
@@ -108,14 +104,6 @@ public class ProgramDTO {
 
     public void setCountry(final Long country) {
         this.country = country;
-    }
-
-    public Long getPrompt() {
-        return prompt;
-    }
-
-    public void setPrompt(final Long prompt) {
-        this.prompt = prompt;
     }
 
 }

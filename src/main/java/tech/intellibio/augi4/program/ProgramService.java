@@ -22,17 +22,17 @@ public class ProgramService {
     private final ProgramRepository programRepository;
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
-    private final PromptRepository promptRepository;
     private final ProjectRepository projectRepository;
+    private final PromptRepository promptRepository;
 
     public ProgramService(final ProgramRepository programRepository,
             final UserRepository userRepository, final CountryRepository countryRepository,
-            final PromptRepository promptRepository, final ProjectRepository projectRepository) {
+            final ProjectRepository projectRepository, final PromptRepository promptRepository) {
         this.programRepository = programRepository;
         this.userRepository = userRepository;
         this.countryRepository = countryRepository;
-        this.promptRepository = promptRepository;
         this.projectRepository = projectRepository;
+        this.promptRepository = promptRepository;
     }
 
     public Page<ProgramDTO> findAll(final String filter, final Pageable pageable) {
@@ -88,7 +88,6 @@ public class ProgramService {
         programDTO.setStatus(program.getStatus());
         programDTO.setUser(program.getUser() == null ? null : program.getUser().getId());
         programDTO.setCountry(program.getCountry() == null ? null : program.getCountry().getId());
-        programDTO.setPrompt(program.getPrompt() == null ? null : program.getPrompt().getId());
         return programDTO;
     }
 
@@ -105,14 +104,7 @@ public class ProgramService {
         final Country country = programDTO.getCountry() == null ? null : countryRepository.findById(programDTO.getCountry())
                 .orElseThrow(() -> new NotFoundException("country not found"));
         program.setCountry(country);
-        final Prompt prompt = programDTO.getPrompt() == null ? null : promptRepository.findById(programDTO.getPrompt())
-                .orElseThrow(() -> new NotFoundException("prompt not found"));
-        program.setPrompt(prompt);
         return program;
-    }
-
-    public boolean promptExists(final Long id) {
-        return programRepository.existsByPromptId(id);
     }
 
     public ReferencedWarning getReferencedWarning(final Long id) {
@@ -123,6 +115,12 @@ public class ProgramService {
         if (progamProject != null) {
             referencedWarning.setKey("program.project.progam.referenced");
             referencedWarning.addParam(progamProject.getId());
+            return referencedWarning;
+        }
+        final Prompt programPrompt = promptRepository.findFirstByProgram(program);
+        if (programPrompt != null) {
+            referencedWarning.setKey("program.prompt.program.referenced");
+            referencedWarning.addParam(programPrompt.getId());
             return referencedWarning;
         }
         return null;

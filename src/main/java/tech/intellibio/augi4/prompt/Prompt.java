@@ -20,7 +20,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import tech.intellibio.augi4.product.Product;
 import tech.intellibio.augi4.program.Program;
-import tech.intellibio.augi4.user.User;
+
 
 
 @Entity
@@ -57,16 +57,12 @@ public class Prompt {
     @JdbcTypeCode(SqlTypes.JSON)
     private List<String> visiblePrompt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @OneToOne(mappedBy = "prompt", fetch = FetchType.LAZY)
-    private Program program;
+    private Product promptProducts;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prompt_products_id", nullable = false)
-    private Product promptProducts;
+    @JoinColumn(name = "program_id")
+    private Program program;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -120,26 +116,8 @@ public class Prompt {
         return visiblePrompt;
     }
 
-    public void setVisiblePrompt(List<String> visiblePrompt) {
+    public void setVisiblePrompt(final List<String> visiblePrompt) {
         this.visiblePrompt = visiblePrompt;
-    }
-
-   
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(final User user) {
-        this.user = user;
-    }
-
-    public Program getProgram() {
-        return program;
-    }
-
-    public void setProgram(final Program program) {
-        this.program = program;
     }
 
     public Product getPromptProducts() {
@@ -148,6 +126,14 @@ public class Prompt {
 
     public void setPromptProducts(final Product promptProducts) {
         this.promptProducts = promptProducts;
+    }
+
+    public Program getProgram() {
+        return program;
+    }
+
+    public void setProgram(final Program program) {
+        this.program = program;
     }
 
     public OffsetDateTime getDateCreated() {

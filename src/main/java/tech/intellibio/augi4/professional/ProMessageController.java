@@ -3,6 +3,7 @@ package tech.intellibio.augi4.professional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import tech.intellibio.augi4.chat_message.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.util.UUID;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,7 +26,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.xml.sax.SAXException;
 import tech.intellibio.augi4.chat_session.ChatSession;
 import tech.intellibio.augi4.chat_session.ChatSessionRepository;
 import tech.intellibio.augi4.product.Product;
@@ -61,17 +64,9 @@ public class ProMessageController {
 
     private final GeniusService geniusService;
     private final PromptRepository promptRepository;
+    private final RAGService documentService;
 
-    public ProMessageController(final ChatMessageService chatMessageService, final ObjectMapper objectMapper, 
-            final ProjectFileRepository projectFileRepository, final ChatSessionRepository chatSessionRepository, 
-            final ProjectRepository projectRepository, final ContentService contentService, 
-            final CustomUserDetailsService customUserDetailsService, 
-            final ProfessionalUserDetailsService professionalUserDetailsService, 
-            final ProductRepository productRepository, final GeniusService geniusService, 
-            tech.intellibio.augi4.user.UserRepository userRepository, 
-            tech.intellibio.augi4.professional.ClaudeService claudeService, 
-            tech.intellibio.augi4.chat_message.ChatMessageRepository messageRepository,
-            final PromptRepository promptRepository) {
+    public ProMessageController(final ChatMessageService chatMessageService, final ObjectMapper objectMapper, final ProjectFileRepository projectFileRepository, final ChatSessionRepository chatSessionRepository, final ProjectRepository projectRepository, final ContentService contentService, final CustomUserDetailsService customUserDetailsService, final ProfessionalUserDetailsService professionalUserDetailsService, final ProductRepository productRepository, final GeniusService geniusService, tech.intellibio.augi4.user.UserRepository userRepository, tech.intellibio.augi4.professional.ClaudeService claudeService, tech.intellibio.augi4.chat_message.ChatMessageRepository messageRepository, final PromptRepository promptRepository, tech.intellibio.augi4.professional.RAGService documentService) {
         this.chatMessageService = chatMessageService;
         this.objectMapper = objectMapper;
         this.projectFileRepository = projectFileRepository;
@@ -85,6 +80,7 @@ public class ProMessageController {
         this.geniusService = geniusService;
         this.messageRepository = messageRepository;
         this.promptRepository = promptRepository;
+        this.documentService = documentService;
     }
 
     @InitBinder
@@ -124,6 +120,41 @@ public class ProMessageController {
 
         return "professional/document";
     }
+    
+    //Document search 
+    @PostMapping("/document")
+    public String dpchat(@RequestParam("files") MultipartFile[] files, @AuthenticationPrincipal UserDetails userDetails, Model model) throws SAXException, IOException {
+        
+        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+        
+        Product product = productRepository.findByName("DocumentSearch")
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        
+        Prompt prompts = promptRepository.findFirstByPromptProducts(product);
+        
+        String currentSessionId =  documentService.createDocuments(files, user);
+        
+        claudeService.createNewSession(product, user, 0, currentSessionId);
+        
+        model.addAttribute("currentSessionId", currentSessionId );
+        model.addAttribute("prompts", prompts.getVisiblePrompt());
+        
+        return "professional/dchat";
+    }
+    
+     @GetMapping(value = "/dstream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter dchat(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String message, @RequestParam String sessionId)
+            throws SQLException {
+
+        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+        
+       String newMessage =  documentService.rag(message, sessionId);
+
+        System.out.println(newMessage);
+
+        return claudeService.streamResponse(sessionId, newMessage, user);
+    }
+    
 
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter chat(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String message, @RequestParam String sessionId)
@@ -131,7 +162,7 @@ public class ProMessageController {
 
         User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
 
-        System.out.println(sessionId);
+        //System.out.println(sessionId);
 
         return claudeService.streamResponse(sessionId, message, user);
     }

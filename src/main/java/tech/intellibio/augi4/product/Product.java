@@ -3,10 +3,13 @@ package tech.intellibio.augi4.product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import java.time.OffsetDateTime;
 import java.util.Set;
@@ -45,8 +48,9 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private Set<ChatSession> session;
 
-    @OneToMany(mappedBy = "promptProducts")
-    private Set<Prompt> prompt;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prompt_id", nullable = false, unique = true)
+    private Prompt prompt;
 
     @OneToMany(mappedBy = "product")
     private Set<Feedback> productFeedbacks;
@@ -91,11 +95,11 @@ public class Product {
         this.session = session;
     }
 
-    public Set<Prompt> getPrompt() {
+    public Prompt getPrompt() {
         return prompt;
     }
 
-    public void setPrompt(final Set<Prompt> prompt) {
+    public void setPrompt(final Prompt prompt) {
         this.prompt = prompt;
     }
 

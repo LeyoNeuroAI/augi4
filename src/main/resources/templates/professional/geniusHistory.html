@@ -84,6 +84,9 @@
                             </div>
                             <div class="card-body p-0 scrollable" style="max-height: 35rem">
                                 <div class="nav flex-column nav-pills" role="tablist">
+                                    
+                                    
+                 
 
                                     <a th:each="chatSession : ${chatSessions}" th:href="@{/professional/genius/GrantGenius/{id}(id=${chatSession.sessionId})}" class="nav-link text-start mw-100 p-3 custom-link" th:id="'chat-' + ${chatSession.id} + '-tab'" data-bs-toggle="pill" role="tab" aria-selected="true">
                                         <div class="row align-items-center flex-fill">

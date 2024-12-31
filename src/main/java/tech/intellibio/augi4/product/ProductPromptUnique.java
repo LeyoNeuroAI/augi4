@@ -1,4 +1,4 @@
-package tech.intellibio.augi4.program;
+package tech.intellibio.augi4.product;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -24,24 +24,24 @@ import org.springframework.web.servlet.HandlerMapping;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(
-        validatedBy = ProgramPromptUnique.ProgramPromptUniqueValidator.class
+        validatedBy = ProductPromptUnique.ProductPromptUniqueValidator.class
 )
-public @interface ProgramPromptUnique {
+public @interface ProductPromptUnique {
 
-    String message() default "{Exists.program.prompt}";
+    String message() default "{Exists.product.prompt}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    class ProgramPromptUniqueValidator implements ConstraintValidator<ProgramPromptUnique, Long> {
+    class ProductPromptUniqueValidator implements ConstraintValidator<ProductPromptUnique, Long> {
 
-        private final ProgramService programService;
+        private final ProductService productService;
         private final HttpServletRequest request;
 
-        public ProgramPromptUniqueValidator(final ProgramService programService,
+        public ProductPromptUniqueValidator(final ProductService productService,
                 final HttpServletRequest request) {
-            this.programService = programService;
+            this.productService = productService;
             this.request = request;
         }
 
@@ -54,11 +54,11 @@ public @interface ProgramPromptUnique {
             @SuppressWarnings("unchecked") final Map<String, String> pathVariables =
                     ((Map<String, String>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE));
             final String currentId = pathVariables.get("id");
-            if (currentId != null && value.equals(programService.get(Long.parseLong(currentId)).getPrompt())) {
+            if (currentId != null && value.equals(productService.get(Long.parseLong(currentId)).getPrompt())) {
                 // value hasn't changed
                 return true;
             }
-            return !programService.promptExists(value);
+            return !productService.promptExists(value);
         }
 
     }

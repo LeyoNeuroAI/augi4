@@ -8,8 +8,6 @@ import tech.intellibio.augi4.product.Product;
 import tech.intellibio.augi4.product.ProductRepository;
 import tech.intellibio.augi4.program.Program;
 import tech.intellibio.augi4.program.ProgramRepository;
-import tech.intellibio.augi4.user.User;
-import tech.intellibio.augi4.user.UserRepository;
 import tech.intellibio.augi4.util.NotFoundException;
 import tech.intellibio.augi4.util.ReferencedWarning;
 
@@ -18,17 +16,14 @@ import tech.intellibio.augi4.util.ReferencedWarning;
 public class PromptService {
 
     private final PromptRepository promptRepository;
-    private final UserRepository userRepository;
-    private final ProductRepository productRepository;
     private final ProgramRepository programRepository;
+    private final ProductRepository productRepository;
 
     public PromptService(final PromptRepository promptRepository,
-            final UserRepository userRepository, final ProductRepository productRepository,
-            final ProgramRepository programRepository) {
+            final ProgramRepository programRepository, final ProductRepository productRepository) {
         this.promptRepository = promptRepository;
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
         this.programRepository = programRepository;
+        this.productRepository = productRepository;
     }
 
     public Page<PromptDTO> findAll(final String filter, final Pageable pageable) {
@@ -81,8 +76,7 @@ public class PromptService {
         promptDTO.setSystemPrompt(prompt.getSystemPrompt());
         promptDTO.setVersion(prompt.getVersion());
         promptDTO.setVisiblePrompt(prompt.getVisiblePrompt());
-        promptDTO.setUser(prompt.getUser() == null ? null : prompt.getUser().getId());
-        promptDTO.setPromptProducts(prompt.getPromptProducts() == null ? null : prompt.getPromptProducts().getId());
+        promptDTO.setProgram(prompt.getProgram() == null ? null : prompt.getProgram().getId());
         return promptDTO;
     }
 
@@ -92,12 +86,9 @@ public class PromptService {
         prompt.setSystemPrompt(promptDTO.getSystemPrompt());
         prompt.setVersion(promptDTO.getVersion());
         prompt.setVisiblePrompt(promptDTO.getVisiblePrompt());
-        final User user = promptDTO.getUser() == null ? null : userRepository.findById(promptDTO.getUser())
-                .orElseThrow(() -> new NotFoundException("user not found"));
-        prompt.setUser(user);
-        final Product promptProducts = promptDTO.getPromptProducts() == null ? null : productRepository.findById(promptDTO.getPromptProducts())
-                .orElseThrow(() -> new NotFoundException("promptProducts not found"));
-        prompt.setPromptProducts(promptProducts);
+        final Program program = promptDTO.getProgram() == null ? null : programRepository.findById(promptDTO.getProgram())
+                .orElseThrow(() -> new NotFoundException("program not found"));
+        prompt.setProgram(program);
         return prompt;
     }
 
@@ -105,10 +96,10 @@ public class PromptService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Prompt prompt = promptRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final Program promptProgram = programRepository.findFirstByPrompt(prompt);
-        if (promptProgram != null) {
-            referencedWarning.setKey("prompt.program.prompt.referenced");
-            referencedWarning.addParam(promptProgram.getId());
+        final Product promptProduct = productRepository.findFirstByPrompt(prompt);
+        if (promptProduct != null) {
+            referencedWarning.setKey("prompt.product.prompt.referenced");
+            referencedWarning.addParam(promptProduct.getId());
             return referencedWarning;
         }
         return null;

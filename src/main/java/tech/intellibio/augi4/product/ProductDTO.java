@@ -15,6 +15,10 @@ public class ProductDTO {
     @Size(max = 255)
     private String name;
 
+    @NotNull
+    @ProductPromptUnique
+    private Long prompt;
+
     public Long getId() {
         return id;
     }
@@ -37,6 +41,14 @@ public class ProductDTO {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public Long getPrompt() {
+        return prompt;
+    }
+
+    public void setPrompt(final Long prompt) {
+        this.prompt = prompt;
     }
 
 }

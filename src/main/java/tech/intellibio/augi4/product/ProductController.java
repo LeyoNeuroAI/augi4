@@ -3,6 +3,7 @@ package tech.intellibio.augi4.product;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import tech.intellibio.augi4.prompt.Prompt;
+import tech.intellibio.augi4.prompt.PromptRepository;
+import tech.intellibio.augi4.util.CustomCollectors;
 import tech.intellibio.augi4.util.ReferencedWarning;
 import tech.intellibio.augi4.util.WebUtils;
 
@@ -24,9 +28,19 @@ import tech.intellibio.augi4.util.WebUtils;
 public class ProductController {
 
     private final ProductService productService;
+    private final PromptRepository promptRepository;
 
-    public ProductController(final ProductService productService) {
+    public ProductController(final ProductService productService,
+            final PromptRepository promptRepository) {
         this.productService = productService;
+        this.promptRepository = promptRepository;
+    }
+
+    @ModelAttribute
+    public void prepareContext(final Model model) {
+        model.addAttribute("promptValues", promptRepository.findAll(Sort.by("id"))
+                .stream()
+                .collect(CustomCollectors.toSortedMap(Prompt::getId, Prompt::getId)));
     }
 
     @GetMapping

@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tech.intellibio.augi4.country.Country;
 import tech.intellibio.augi4.country.CountryRepository;
-import tech.intellibio.augi4.prompt.Prompt;
-import tech.intellibio.augi4.prompt.PromptRepository;
 import tech.intellibio.augi4.user.User;
 import tech.intellibio.augi4.user.UserRepository;
 import tech.intellibio.augi4.util.CustomCollectors;
@@ -34,15 +32,12 @@ public class ProgramController {
     private final ProgramService programService;
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
-    private final PromptRepository promptRepository;
 
     public ProgramController(final ProgramService programService,
-            final UserRepository userRepository, final CountryRepository countryRepository,
-            final PromptRepository promptRepository) {
+            final UserRepository userRepository, final CountryRepository countryRepository) {
         this.programService = programService;
         this.userRepository = userRepository;
         this.countryRepository = countryRepository;
-        this.promptRepository = promptRepository;
     }
 
     @ModelAttribute
@@ -53,9 +48,6 @@ public class ProgramController {
         model.addAttribute("countryValues", countryRepository.findAll(Sort.by("id"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(Country::getId, Country::getCode)));
-        model.addAttribute("promptValues", promptRepository.findAll(Sort.by("id"))
-                .stream()
-                .collect(CustomCollectors.toSortedMap(Prompt::getId, Prompt::getId)));
     }
 
     @GetMapping

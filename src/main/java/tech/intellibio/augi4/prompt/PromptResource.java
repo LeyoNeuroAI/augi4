@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tech.intellibio.augi4.professional.GeniusService;
 import tech.intellibio.augi4.util.ReferencedException;
 import tech.intellibio.augi4.util.ReferencedWarning;
 
@@ -33,12 +31,9 @@ import tech.intellibio.augi4.util.ReferencedWarning;
 public class PromptResource {
 
     private final PromptService promptService;
-    
-    private final GeniusService geniusService;
 
-    public PromptResource(final PromptService promptService, tech.intellibio.augi4.professional.GeniusService geniusService) {
+    public PromptResource(final PromptService promptService) {
         this.promptService = promptService;
-        this.geniusService = geniusService;
     }
 
     @Operation(
@@ -60,12 +55,6 @@ public class PromptResource {
                     )
             }
     )
-    
-    
-    
-   
-    
-    
     @GetMapping
     public ResponseEntity<Page<PromptDTO>> getAllPrompts(
             @RequestParam(name = "filter", required = false) final String filter,

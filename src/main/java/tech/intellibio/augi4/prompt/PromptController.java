@@ -1,6 +1,9 @@
 package tech.intellibio.augi4.prompt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -9,45 +12,50 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import tech.intellibio.augi4.product.Product;
-import tech.intellibio.augi4.product.ProductRepository;
-import tech.intellibio.augi4.user.User;
-import tech.intellibio.augi4.user.UserRepository;
+import tech.intellibio.augi4.program.Program;
+import tech.intellibio.augi4.program.ProgramRepository;
 import tech.intellibio.augi4.util.CustomCollectors;
+import tech.intellibio.augi4.util.JsonStringFormatter;
+import tech.intellibio.augi4.util.NotFoundException;
 import tech.intellibio.augi4.util.ReferencedWarning;
 import tech.intellibio.augi4.util.WebUtils;
-
 
 @Controller
 @RequestMapping("/prompts")
 public class PromptController {
 
     private final PromptService promptService;
-    private final UserRepository userRepository;
-    private final ProductRepository productRepository;
+    private final ObjectMapper objectMapper;
+    private final ProgramRepository programRepository;
+    private final PromptRepository promptRepository;
 
-    public PromptController(final PromptService promptService, final UserRepository userRepository,
-            final ProductRepository productRepository) {
+    public PromptController(final PromptService promptService, final ObjectMapper objectMapper, final ProgramRepository programRepository, tech.intellibio.augi4.prompt.PromptRepository promptRepository) {
         this.promptService = promptService;
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
+        this.objectMapper = objectMapper;
+        this.programRepository = programRepository;
+        this.promptRepository = promptRepository;
+    }
+
+    @InitBinder
+    public void jsonFormatting(final WebDataBinder binder) {
+        binder.addCustomFormatter(new JsonStringFormatter<List<String>>(objectMapper) {
+        }, "visiblePrompt");
     }
 
     @ModelAttribute
     public void prepareContext(final Model model) {
-        model.addAttribute("userValues", userRepository.findAll(Sort.by("id"))
+        model.addAttribute("programValues", programRepository.findAll(Sort.by("id"))
                 .stream()
-                .collect(CustomCollectors.toSortedMap(User::getId, User::getEmail)));
-        model.addAttribute("promptProductsValues", productRepository.findAll(Sort.by("id"))
-                .stream()
-                .collect(CustomCollectors.toSortedMap(Product::getId, Product::getName)));
+                .collect(CustomCollectors.toSortedMap(Program::getId, Program::getName)));
     }
 
     @GetMapping
@@ -62,17 +70,36 @@ public class PromptController {
     }
 
     @GetMapping("/add")
+
     public String add(@ModelAttribute("prompt") final PromptDTO promptDTO) {
+
         return "prompt/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("prompt") @Valid final PromptDTO promptDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return "prompt/add";
-        }
-        promptService.create(promptDTO);
+//        if (bindingResult.hasErrors()) {
+//            return "prompt/add";
+//        }
+
+        Prompt prompt = new Prompt();
+        prompt.setChapterNo(promptDTO.getChapterNo());
+        prompt.setInvisiblePrompt(promptDTO.getInvisiblePrompt());
+        prompt.setSystemPrompt(promptDTO.getSystemPrompt());
+        prompt.setVersion(promptDTO.getVersion());
+        List<String> visiblePrompt = new ArrayList<>();
+        visiblePrompt.add("Item 1");
+        visiblePrompt.add("Item 2");
+        visiblePrompt.add("Item 3");
+
+        prompt.setVisiblePrompt(visiblePrompt);
+        final Program program = promptDTO.getProgram() == null ? null : programRepository.findById(promptDTO.getProgram())
+                .orElseThrow(() -> new NotFoundException("program not found"));
+        prompt.setProgram(program);
+//        promptService.create(promptDTO);
+        promptRepository.save(prompt);
+
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("prompt.create.success"));
         return "redirect:/prompts";
     }

@@ -18,16 +18,17 @@ import tech.intellibio.augi4.util.ReferencedWarning;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ChatSessionRepository chatSessionRepository;
     private final PromptRepository promptRepository;
+    private final ChatSessionRepository chatSessionRepository;
     private final FeedbackRepository feedbackRepository;
 
     public ProductService(final ProductRepository productRepository,
+            final PromptRepository promptRepository,
             final ChatSessionRepository chatSessionRepository,
-            final PromptRepository promptRepository, final FeedbackRepository feedbackRepository) {
+            final FeedbackRepository feedbackRepository) {
         this.productRepository = productRepository;
-        this.chatSessionRepository = chatSessionRepository;
         this.promptRepository = promptRepository;
+        this.chatSessionRepository = chatSessionRepository;
         this.feedbackRepository = feedbackRepository;
     }
 
@@ -78,13 +79,21 @@ public class ProductService {
         productDTO.setId(product.getId());
         productDTO.setDescription(product.getDescription());
         productDTO.setName(product.getName());
+        productDTO.setPrompt(product.getPrompt() == null ? null : product.getPrompt().getId());
         return productDTO;
     }
 
     private Product mapToEntity(final ProductDTO productDTO, final Product product) {
         product.setDescription(productDTO.getDescription());
         product.setName(productDTO.getName());
+        final Prompt prompt = productDTO.getPrompt() == null ? null : promptRepository.findById(productDTO.getPrompt())
+                .orElseThrow(() -> new NotFoundException("prompt not found"));
+        product.setPrompt(prompt);
         return product;
+    }
+
+    public boolean promptExists(final Long id) {
+        return productRepository.existsByPromptId(id);
     }
 
     public ReferencedWarning getReferencedWarning(final Long id) {
@@ -95,12 +104,6 @@ public class ProductService {
         if (productChatSession != null) {
             referencedWarning.setKey("product.chatSession.product.referenced");
             referencedWarning.addParam(productChatSession.getId());
-            return referencedWarning;
-        }
-        final Prompt promptProductsPrompt = promptRepository.findFirstByPromptProducts(product);
-        if (promptProductsPrompt != null) {
-            referencedWarning.setKey("product.prompt.promptProducts.referenced");
-            referencedWarning.addParam(promptProductsPrompt.getId());
             return referencedWarning;
         }
         final Feedback productFeedback = feedbackRepository.findFirstByProduct(product);

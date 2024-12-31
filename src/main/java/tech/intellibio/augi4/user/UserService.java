@@ -177,12 +177,7 @@ public class UserService {
             referencedWarning.addParam(userFeedback.getId());
             return referencedWarning;
         }
-        final Prompt userPrompt = promptRepository.findFirstByUser(user);
-        if (userPrompt != null) {
-            referencedWarning.setKey("user.prompt.user.referenced");
-            referencedWarning.addParam(userPrompt.getId());
-            return referencedWarning;
-        }
+       
         final ChatSession userChatSession = chatSessionRepository.findFirstByUser(user);
         if (userChatSession != null) {
             referencedWarning.setKey("user.chatSession.user.referenced");

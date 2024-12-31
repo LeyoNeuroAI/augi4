@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -68,12 +67,11 @@ public class Program {
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prompt_id", nullable = false, unique = true)
-    private Prompt prompt;
-
     @OneToMany(mappedBy = "progam")
     private Set<Project> progamProjects;
+
+    @OneToMany(mappedBy = "program")
+    private Set<Prompt> prompt;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -155,20 +153,20 @@ public class Program {
         this.country = country;
     }
 
-    public Prompt getPrompt() {
-        return prompt;
-    }
-
-    public void setPrompt(final Prompt prompt) {
-        this.prompt = prompt;
-    }
-
     public Set<Project> getProgamProjects() {
         return progamProjects;
     }
 
     public void setProgamProjects(final Set<Project> progamProjects) {
         this.progamProjects = progamProjects;
+    }
+
+    public Set<Prompt> getPrompt() {
+        return prompt;
+    }
+
+    public void setPrompt(final Set<Prompt> prompt) {
+        this.prompt = prompt;
     }
 
     public OffsetDateTime getDateCreated() {

@@ -11,10 +11,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import java.time.OffsetDateTime;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import tech.intellibio.augi4.user.User;
+import io.hypersistence.utils.hibernate.type.array.DoubleArrayType;
 
 
 @Entity
@@ -38,14 +40,15 @@ public class Document {
     @Column(nullable = false, columnDefinition = "text")
     private String content;
 
-    @Column(nullable = false)
-    private String embedding;
+  @Type(DoubleArrayType.class)
+@Column(name = "embedding", columnDefinition = "vector(384)")
+private double[] embedding;
 
     @Column(nullable = false, columnDefinition = "text")
     private String filename;
 
     @Column
-    private Integer sessionId;
+    private String sessionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -75,13 +78,15 @@ public class Document {
         this.content = content;
     }
 
-    public String getEmbedding() {
+    public double[] getEmbedding() {
         return embedding;
     }
 
-    public void setEmbedding(final String embedding) {
+    public void setEmbedding(double[] embedding) {
         this.embedding = embedding;
     }
+
+   
 
     public String getFilename() {
         return filename;
@@ -91,13 +96,15 @@ public class Document {
         this.filename = filename;
     }
 
-    public Integer getSessionId() {
+    public String getSessionId() {
         return sessionId;
     }
 
-    public void setSessionId(final Integer sessionId) {
+    public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
+
+   
 
     public User getUser() {
         return user;

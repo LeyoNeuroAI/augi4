@@ -2,6 +2,7 @@ package tech.intellibio.augi4.document;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 
 public class DocumentDTO {
@@ -12,13 +13,12 @@ public class DocumentDTO {
     private String content;
 
     @NotNull
-    @Size(max = 255)
-    private String embedding;
+    private double[] embedding;
 
     @NotNull
     private String filename;
 
-    private Integer sessionId;
+    private String sessionId;
 
     @NotNull
     private Long user;
@@ -39,13 +39,17 @@ public class DocumentDTO {
         this.content = content;
     }
 
-    public String getEmbedding() {
+    public double[] getEmbedding() {
         return embedding;
     }
 
-    public void setEmbedding(final String embedding) {
+    public void setEmbedding(double[] embedding) {
         this.embedding = embedding;
     }
+
+   
+
+   
 
     public String getFilename() {
         return filename;
@@ -55,13 +59,15 @@ public class DocumentDTO {
         this.filename = filename;
     }
 
-    public Integer getSessionId() {
+    public String getSessionId() {
         return sessionId;
     }
 
-    public void setSessionId(final Integer sessionId) {
+    public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
+
+  
 
     public Long getUser() {
         return user;

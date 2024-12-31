@@ -24,10 +24,7 @@ public class PromptDTO {
     @NotNull
     private List<@Size(max = 255) String> visiblePrompt;
 
-    private Long user;
-
-    @NotNull
-    private Long promptProducts;
+    private Long program;
 
     public Long getId() {
         return id;
@@ -73,26 +70,16 @@ public class PromptDTO {
         return visiblePrompt;
     }
 
-    public void setVisiblePrompt(List<String> visiblePrompt) {
+    public void setVisiblePrompt(final List<String> visiblePrompt) {
         this.visiblePrompt = visiblePrompt;
     }
 
-  
-
-    public Long getUser() {
-        return user;
+    public Long getProgram() {
+        return program;
     }
 
-    public void setUser(final Long user) {
-        this.user = user;
-    }
-
-    public Long getPromptProducts() {
-        return promptProducts;
-    }
-
-    public void setPromptProducts(final Long promptProducts) {
-        this.promptProducts = promptProducts;
+    public void setProgram(final Long program) {
+        this.program = program;
     }
 
 }

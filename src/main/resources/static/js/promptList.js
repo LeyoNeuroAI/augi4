@@ -25,13 +25,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     form.addEventListener('submit', (event) => {
+        console.log("done");
         event.preventDefault();
         const visiblePromptItems = Array.from(visiblePromptList.children).map(li => li.firstChild.textContent);
+        console.log(visiblePromptItems);
         const visiblePromptField = document.createElement('input');
         visiblePromptField.type = 'hidden';
         visiblePromptField.name = 'visiblePrompt';
         visiblePromptField.value = visiblePromptItems;
         form.appendChild(visiblePromptField);
+        console.log(form);
         form.submit();
     });
 });

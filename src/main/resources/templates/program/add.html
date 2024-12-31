@@ -22,7 +22,6 @@
                 <div th:replace="~{fragments/forms::inputRow(object='program', field='status', type='checkbox')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='program', field='user', required=true, type='select')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='program', field='country', required=true, type='select')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='program', field='prompt', required=true, type='select')}" />
                 <input type="submit" th:value="#{program.add.headline}" class="btn btn-primary mt-4" />
             </form>
         </div>
