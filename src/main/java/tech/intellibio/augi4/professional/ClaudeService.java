@@ -98,8 +98,8 @@ public class ClaudeService {
 
     public SseEmitter streamResponse(String sessionId, String content, User user) throws SQLException {
 
-        Product product = productRepository.findByName("GrantGenius")
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+//        Product product = productRepository.findByName("GrantGenius")
+//                .orElseThrow(() -> new RuntimeException("Product not found"));
 
         Map<String, Object> chatData1 = new HashMap<>();
         chatData1.put("role", "user");
@@ -141,7 +141,7 @@ public class ClaudeService {
                         "messages", getChatHistory(chatSession)
                 );
 
-                ObjectMapper objectMapper = new ObjectMapper();
+              
                 String jsonBody = objectMapper.writeValueAsString(requestBody);
 
                 // Define RequestCallback
@@ -216,7 +216,7 @@ public void appendChatHistory(ChatSession session, Map<String, Object> chatData)
         }
         messages.add(jsonString);
         messageRepository.save(chatMessage); // persist the updated object to the database
-        System.out.println("done");
+       
     } catch (Exception e) {
         throw new RuntimeException("Error appending chat data to ChatMessage entity", e);
     }
@@ -225,6 +225,7 @@ public void appendChatHistory(ChatSession session, Map<String, Object> chatData)
 
 
     public List<Map<String, Object>> getChatHistory(ChatSession session) {
+        
         ChatMessage chatMessage = messageRepository.findBySession(session)
                                           .orElseGet(() -> {
                                               ChatMessage newChatMessage = new ChatMessage();
@@ -288,27 +289,6 @@ public void appendChatHistory(ChatSession session, Map<String, Object> chatData)
 
     }
 
-//    private ChatMessage getMessageHistory(ChatSession chatSession) {
-//        return messageRepository.findBySession(chatSession);
-//    }
 
-//        private int estimateTokens(String content) {
-//        // Simple estimation: ~4 chars per token
-//        return content.length() / 4;
-//    }
-    private List<Map<String, String>> prepareMessagesForApi(
-            List<ChatMessage> history,
-            String newMessage) {
-        List<Map<String, String>> messages = new ArrayList<>();
-        int totalTokens = 0;
-
-        // Add new message first (it's the most important)
-        messages.add(Map.of(
-                "role", "user",
-                "content", newMessage
-        ));
-//
-
-        return messages;
-    }
+   
 }

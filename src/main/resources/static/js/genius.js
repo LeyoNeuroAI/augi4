@@ -163,6 +163,9 @@ document.querySelectorAll('.custom-link').forEach(function(link) {
             if (!currentAssistantMessage.textContent) {
                 currentAssistantMessage.textContent = 'Error: Failed to get response';
                 console.log(error);
+                 console.log('Connection state:', eventSource.readyState);
+  console.log('Status:', event.target.status);
+  console.log('Headers:', event.target.getAllResponseHeaders());
             }
         };
     }
