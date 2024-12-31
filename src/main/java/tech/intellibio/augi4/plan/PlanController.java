@@ -52,7 +52,7 @@ public class PlanController {
             return "plan/add";
         }
         
-        System.out.println(planDTO.getName());
+        
         planService.create(planDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("plan.create.success"));
         return "redirect:/plans";

@@ -23,7 +23,7 @@ public class ProjectDTO {
 
     @NotNull
     @Size(max = 255)
-    private String status;
+    private String status =  "In Progess";
 
     @NotNull
     private String summary;

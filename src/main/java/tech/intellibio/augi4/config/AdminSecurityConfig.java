@@ -48,7 +48,7 @@ public class AdminSecurityConfig {
                     .loginPage("/admin/login")
                     .usernameParameter("email")
                     .failureUrl("/admin/login?loginError=true")
-                    .defaultSuccessUrl("/home/index", true))
+                   )
                 .rememberMe(rememberMe -> rememberMe
                     .tokenValiditySeconds(((int)Duration.ofDays(180).getSeconds()))
                     .rememberMeParameter("rememberMe")
