@@ -4,16 +4,25 @@
  */
 package tech.intellibio.augi4.professional;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.net.URI;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.tika.Tika;
+import org.apache.tika.exception.TikaException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -26,9 +35,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.intellibio.augi4.chat_session.ChatSession;
 import tech.intellibio.augi4.country.Country;
 import tech.intellibio.augi4.country.CountryRepository;
+import tech.intellibio.augi4.product.Product;
+import tech.intellibio.augi4.product.ProductRepository;
 import tech.intellibio.augi4.program.Program;
 import tech.intellibio.augi4.program.ProgramRepository;
 import tech.intellibio.augi4.project.Project;
@@ -43,6 +54,11 @@ import tech.intellibio.augi4.user.User;
 import tech.intellibio.augi4.user.UserRepository;
 import tech.intellibio.augi4.util.CustomCollectors;
 import tech.intellibio.augi4.util.WebUtils;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import tech.intellibio.augi4.professional.ClaudeService;
 
 /**
  *
@@ -59,8 +75,10 @@ public class projectControllers {
     private final ProjectFileRepository projectFilesRepository;
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
+     private final ProductRepository productRepository;
+      private final ClaudeService claudeService;
 
-    public projectControllers(tech.intellibio.augi4.program.ProgramRepository programRepository, tech.intellibio.augi4.project.ProjectRepository projectRepository, tech.intellibio.augi4.prompt.PromptRepository promptRepository, final ProjectFileRepository projectFilesRepository, tech.intellibio.augi4.user.UserRepository userRepository, tech.intellibio.augi4.project.ProjectService projectService, tech.intellibio.augi4.country.CountryRepository countryRepository) {
+    public projectControllers(tech.intellibio.augi4.program.ProgramRepository programRepository, tech.intellibio.augi4.project.ProjectRepository projectRepository, tech.intellibio.augi4.prompt.PromptRepository promptRepository, final ProjectFileRepository projectFilesRepository, tech.intellibio.augi4.user.UserRepository userRepository, tech.intellibio.augi4.project.ProjectService projectService, tech.intellibio.augi4.country.CountryRepository countryRepository, tech.intellibio.augi4.product.ProductRepository productRepository, tech.intellibio.augi4.professional.ClaudeService claudeService) {
 
         this.programRepository = programRepository;
         this.projectRepository = projectRepository;
@@ -69,8 +87,11 @@ public class projectControllers {
         this.userRepository = userRepository;
         this.projectService = projectService;
         this.countryRepository = countryRepository;
+        this.productRepository = productRepository;
+        this.claudeService = claudeService;
 
     }
+
     @ModelAttribute
     public void prepareContext(final Model model) {
         model.addAttribute("userValues", userRepository.findAll(Sort.by("id"))
@@ -108,20 +129,140 @@ public class projectControllers {
         User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
 
         Project project = createProject(projectDTO, user);
- // Redirect to the new entity's detail page
-    redirectAttributes.addAttribute("id", project.getId());
-    return "redirect:/professional/genie/grant/edit/{id}";
+        // Redirect to the new entity's detail page
+        redirectAttributes.addAttribute("id", project.getId());
+        redirectAttributes.addAttribute("project", project);
+        return "redirect:/professional/genie/grant/edit/{id}";
     }
+
+    @GetMapping("/grant/edit/file/{id}/{fileId}")
+    public String editFile(Model model, @PathVariable Long fileId, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        
+        
+        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+
+        Product product = productRepository.findByName("GrantGenie")
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        // Generate a new session ID
+        String sessionId = UUID.randomUUID().toString();
+
+        ChatSession newSession = claudeService.createNewSession(product, user, 0, sessionId);
+
+       
+        
+        
+         Prompt prompts = promptRepository.findFirstByPromptProducts(product);
+         
+        
+         
+   
+
+        model.addAttribute("currentSessionId", sessionId );
+        model.addAttribute("prompts", prompts.getVisiblePrompt());
+        // Add the chat sessions to the model
+        
+
+        Project project = projectRepository.findById(id).
+                orElseThrow(() -> new RuntimeException("Project not found"));
+
+        List<ProjectFile> projectFiles = projectFilesRepository.findByFile(project);
+
+        model.addAttribute("projectFiles", projectFiles);
+
+        ProjectFile projectFile = projectFilesRepository.findById(fileId).
+                orElseThrow(() -> new RuntimeException("File not found"));
+
+        model.addAttribute("projectFile", projectFile);
+        model.addAttribute("project", project);
+
+        return "professional/edit";
+    }
+
+    @PostMapping("/grant/edit/file/{id}/{fileId}")
+    public String editFilep(Model model, @PathVariable Long fileId, @PathVariable Long id, @RequestParam("content") String content) {
+        Project project = projectRepository.findById(id).
+                orElseThrow(() -> new RuntimeException("Project not found"));
+
+        List<ProjectFile> projectFiles = projectFilesRepository.findByFile(project);
+
+        model.addAttribute("projectFiles", projectFiles);
+
+        ProjectFile projectFile = projectFilesRepository.findById(fileId).
+                orElseThrow(() -> new RuntimeException("File not found"));
+
+        projectFile.setContent(content);
+
+        projectFilesRepository.save(projectFile);
+
+        model.addAttribute("projectFile", projectFile);
+        model.addAttribute("project", project);
+
+        return "professional/edit";
+    }
+
+
+// File download
+@GetMapping(value = "/grant/edit/file/{id}/{fileId}/export", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<ByteArrayResource> exportToWord(@PathVariable Long id, HttpServletRequest request) throws TikaException, IOException {
+        Project project = projectRepository.findById(id).
+                orElseThrow(() -> new RuntimeException("Project not found"));
+
+        List<ProjectFile> projectFiles = projectFilesRepository.findByFile(project);
+
+
+      
+        XWPFDocument document = new XWPFDocument();
+        
+        for (ProjectFile file : projectFiles) {
+            // Add title
+            XWPFParagraph titleParagraph = document.createParagraph();
+            titleParagraph.setStyle("Heading1");
+            XWPFRun titleRun = titleParagraph.createRun();
+            titleRun.setText(file.getName());
+            titleRun.setBold(true);
+            titleRun.setFontSize(16);
+            
+            // Add content
+            XWPFParagraph contentParagraph = document.createParagraph();
+            XWPFRun contentRun = contentParagraph.createRun();
+             String cleanContent = file.getContent().replaceAll("<[^>]*>", "");
+            contentRun.setText(cleanContent);
+            
+            // Add project name
+//            XWPFParagraph projectParagraph = document.createParagraph();
+//            XWPFRun projectRun = projectParagraph.createRun();
+//            projectRun.setText("Project: " + file.getProject().getName());
+//            projectRun.setItalic(true);
+            
+            // Add spacing
+            document.createParagraph();
+        }
+        
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        document.write(outputStream);
+        ByteArrayResource resource = new ByteArrayResource(outputStream.toByteArray());
+        
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, 
+                "attachment;filename=" + project.getName() + ".docx")
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .body(resource);
+    }
+    
+   
+
 
     @GetMapping("/grant/edit/{id}")
     public String edit(Model model, @PathVariable Long id) {
 
         Project project = projectRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("Program not found"));
+                orElseThrow(() -> new RuntimeException("Project not found"));
 
         List<ProjectFile> projectFiles = projectFilesRepository.findByFile(project);
 
         model.addAttribute("projectFiles", projectFiles);
+        model.addAttribute("project", project);
 
         return "professional/edit";
     }
