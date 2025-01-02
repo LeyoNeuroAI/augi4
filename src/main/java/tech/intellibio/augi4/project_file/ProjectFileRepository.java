@@ -15,5 +15,7 @@ public interface ProjectFileRepository extends JpaRepository<ProjectFile, Long> 
     
     List<ProjectFile> findByFile(Project project);
     
+    ProjectFile findContentByFileAndChapterNo(Project File, Integer ChapterNo);
+    
 
 }

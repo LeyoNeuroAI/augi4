@@ -4,12 +4,14 @@
  */
 package tech.intellibio.augi4.professional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -58,6 +60,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import tech.intellibio.augi4.professional.ClaudeService;
 
 /**
@@ -90,6 +93,68 @@ public class projectControllers {
         this.productRepository = productRepository;
         this.claudeService = claudeService;
 
+    }
+    
+   
+    @GetMapping(value = "/gStream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamResponse(@RequestParam String message,
+           
+            @RequestParam Integer fileId,
+            @RequestParam Integer chapterNo,
+            @RequestParam Long projectId,
+            
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam String sessionId,
+           
+            @RequestParam(required = false) Boolean chainPreviousChapter) throws JsonProcessingException, SQLException {
+
+        String completePrompt;
+        
+        System.out.println(chainPreviousChapter);
+
+        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+
+
+        Project project = projectRepository.findById(projectId).
+                orElseThrow(() -> new RuntimeException("Project not found"));
+       
+      
+       
+        Prompt prompts = promptRepository.findByChapterNoAndProgram(chapterNo, project.getProgam())
+                .orElseThrow(() -> new RuntimeException("Prompt not found"));
+                
+            
+       
+       
+
+        String invisiblePrompt = prompts.getInvisiblePrompt();
+        
+         
+        
+        // Check if the optional parameter is present and its value
+        if (chainPreviousChapter != null && chainPreviousChapter && chapterNo > 0) {
+            // Handle the case where the checkbox is checked
+            
+            Integer previous = chapterNo - 1;
+           ProjectFile previousFile = projectFilesRepository.findContentByFileAndChapterNo(project , previous);
+           
+          
+            ProjectFile Chapter0 = projectFilesRepository.findContentByFileAndChapterNo(project , 0);
+           
+         
+            //System.out.println("Chapter0: " + Chapter0);
+            // You can further process the previous chapter content here
+
+            completePrompt = invisiblePrompt + "\n" + message + "previous_chapter: " + previousFile.getContent() + "Chapter 0: " + Chapter0.getContent();
+        } else {
+
+            // Construct the complete prompt
+            completePrompt = invisiblePrompt + "\n" + message;
+        }
+        
+        System.out.println(completePrompt);
+        
+     return claudeService.streamResponse(sessionId, completePrompt, user);
     }
 
     @ModelAttribute

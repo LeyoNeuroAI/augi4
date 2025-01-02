@@ -28,6 +28,8 @@
                         <label class="form-check form-check-inline">
                             <span class="form-check-label">Project Name: </span>
                             <span id="project-name-display" th:text="${project.name}" class="navbar-text me-3"></span>
+                            <input type="hidden"  class="form-control" id="projectId" name="projectId" th:value="${project.Id}"/>
+
                         </label>
                         <div>
                             <label class="form-check form-check-inline">
@@ -36,11 +38,11 @@
                             </label>
 
                         </div>
-                       
-                            
-                            <a th:href="@{${requestUri} + '/export'}" 
-                       class="btn btn-primary">Download</a>
-                       
+
+
+                        <a th:href="@{${requestUri} + '/export'}" 
+                           class="btn btn-primary">Download</a>
+
                     </div>
                 </nav>
 
@@ -88,6 +90,8 @@
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label">Chapter No</label>
+                                        <input type="hidden"  class="form-control" id="fileid" name="fileid" th:value="${projectFile.Id}"/>
+
                                         <input type="text" class="form-control" placeholder="Name" id="chapter-no" th:value="${projectFile.chapterNo}" readonly>
                                     </div>
                                     <div class="mb-3">
@@ -109,8 +113,8 @@
                             <div class="card-body scrollable" style="height: 35rem">
                                 <div class="chat">
                                     <div class="chat-bubbles" id="chat-container">
-                                        
-                                         <div class="chat-item">
+
+                                        <div class="chat-item">
                                             <div class="row align-items-end">
                                                 <div class="col col-lg-12">
                                                     <div class="chat-bubble chat-bubble-me">
@@ -145,7 +149,7 @@
                             <div class="card-footer">
                                 <div class="input-group input-group-flat">
                                     <input type="text" class="form-control" autocomplete="off" id="message-input" placeholder="Type message" />
-                                     <input type="hidden"  class="form-control" id="sessionInput" name="sessionInput" th:value="${currentSessionId}"/>
+                                    <input type="hidden"  class="form-control" id="sessionInput" name="sessionInput" th:value="${currentSessionId}"/>
 
                                     <span class="input-group-text">
                                         <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="Clear search" title="Clear search">

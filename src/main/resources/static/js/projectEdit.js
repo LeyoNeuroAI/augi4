@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Get the button element
 
-    const sessionInput = document.getElementById("sessionInput");
+    
     let currentAssistantMessage = null;
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -184,9 +184,15 @@ document.querySelectorAll('.custom-link').forEach(function(link) {
     }
 
     function sendMessage() {
+        
+            
+        const projectId = document.getElementById("projectId").value;
+        const fileid = document.getElementById("fileid").value;
+        const chapterNo = document.getElementById("chapter-no").value;
+         const chainPreviousChapter = document.getElementById('chainPreviousChapterCheckbox').checked;
+         const sessionId = document.getElementById("sessionInput").value;
 
-        const sessionId = sessionInput.value;
-        console.log(sessionId);
+
         const message = messageInput.value.trim();
         if (!message)
             return;
@@ -197,9 +203,18 @@ document.querySelectorAll('.custom-link').forEach(function(link) {
 
         // Create new div for assistant's response
         currentAssistantMessage = addChatMessageGG('');
+        
+        let url =  `/professional/genie/gStream?sessionId=${sessionId}&projectId=${projectId}&fileId=${fileid}&chapterNo=${chapterNo}&message=${encodeURIComponent(message)}`;
+          if (chainPreviousChapter) {
+            //console.log('Checkbox state:true');
+
+            url += `&chainPreviousChapter=true`;
+        }
 
         // Start streaming response
-        const eventSource = new EventSource(`/professional/stream?sessionId=${sessionId}&message=${encodeURIComponent(message)}`);
+        const eventSource = new EventSource(url);
+        
+        
 
         eventSource.onmessage = function (event) {
             currentAssistantMessage.textContent += event.data + ' ';
