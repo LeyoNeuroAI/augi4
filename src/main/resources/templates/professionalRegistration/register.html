@@ -50,9 +50,7 @@
                 <div class="mb-3">
 
 
-                    <span class="form-check-label">Agree to the <a th:href="@{/professional/terms}" tabindex="-1" target="_blank">terms and policy</a>.</span>
 
-                    <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='terms', type='checkbox')}" />
 
 
                 </div>
@@ -66,8 +64,17 @@
                     <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='country', required=true, type='select')}" />
 
                 </div>
+                    <div class="mb-3">
+                        
+                         <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='terms', type='checkbox')}" />
+                    <div class="text-center text-secondary mt-3">
+                        <a th:href="@{/professional/terms}" tabindex="-1" target="_blank">Terms and Conditions</a>
+
+                    </div>
+                        </div>
                 <div class="form-footer">
 
+                   
 
 
                     <button type="submit" th:text="#{registration.register.headline}" class="btn btn-primary w-100"></button>
@@ -75,7 +82,8 @@
             </div>
         </form>
         <div class="text-center text-secondary mt-3">
-            Already have account? <a th:href="@{/professional/register}" tabindex="-1">Sign in</a>
+
+            Already have account? <a th:href="@{/professional/login}" tabindex="-1">Sign in</a>
         </div>
 
 
