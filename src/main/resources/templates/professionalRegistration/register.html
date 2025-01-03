@@ -1,33 +1,85 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{loginLayout}">
+      layout:decorate="~{professional/loginLayout}">
     <head>
         <title>[[#{registration.register.headline}]]</title>
     </head>
-    <body>
-        <div layout:fragment="content">
-            <h1 class="mb-4">[[#{registration.register.headline}]]</h1>
-            <div th:replace="~{fragments/forms::globalErrors('registrationRequest')}" />
-            <form th:action="${requestUri}" method="post">
-                                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='name', required=true)}" />
 
-                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='email', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='password', required=true, type='password')}" />
-                                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='organisation', required=true)}" />
+    <div layout:fragment="content">
+        <div th:replace="~{fragments/forms::globalErrors('registrationRequest')}" />
 
-                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='refer')}" />
-                <div  class="row mb-3" >
-        <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='terms', type='checkbox')}" />
-         <div class="col-md-2 offset-md-2"> 
-        <a th:href="@{/professional/terms}" target="_blank">Terms and Conditions</a>
+
+        <div class="text-center mb-4">
+            <a href="." class="navbar-brand navbar-brand-autodark">
+                <img th:src="@{/images/logo.png}" th:alt="#{app.title}" width="110" height="32" class="navbar-brand-image">
+
+            </a>
         </div>
+
+
+
+
+
+        <form class="card card-md" th:action="${requestUri}" method="post" autocomplete="off" novalidate>
+
+
+
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Create new account</h2>
+                <div class="mb-3">
+                    <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='name', required=true)}" />
+
                 </div>
+                <div class="mb-3">
+                    <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='email', required=true)}" />
+
+                </div>
+                <div class="mb-3">
+                    <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='password', required=true, type='password')}" />
+
+                </div>
+                <div class="mb-3">
+                    <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='organisation', required=true)}" />
+
+                </div>
+                <div class="mb-3">
+                    <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='refer')}" />
+
+                </div>
+
+                <div class="mb-3">
+
+
+                    <span class="form-check-label">Agree to the <a th:href="@{/professional/terms}" tabindex="-1" target="_blank">terms and policy</a>.</span>
+
+                    <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='terms', type='checkbox')}" />
+
+
+                </div>
+
+                <div class="mb-3">
                     <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='plan', required=true, type='select')}" />
 
-    
-                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='country', required=true, type='select')}" />
-                <input type="submit" th:value="#{registration.register.headline}" class="btn btn-primary mt-4" />
-            </form>
+                </div>
+
+                <div class="mb-3">
+                    <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='country', required=true, type='select')}" />
+
+                </div>
+                <div class="form-footer">
+
+
+
+                    <button type="submit" th:text="#{registration.register.headline}" class="btn btn-primary w-100"></button>
+                </div>
+            </div>
+        </form>
+        <div class="text-center text-secondary mt-3">
+            Already have account? <a th:href="@{/professional/register}" tabindex="-1">Sign in</a>
         </div>
-    </body>
+
+
+
+    </div>
+
 </html>

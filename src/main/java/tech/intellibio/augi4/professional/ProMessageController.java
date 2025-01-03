@@ -3,29 +3,35 @@ package tech.intellibio.augi4.professional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import tech.intellibio.augi4.chat_message.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.response.ChatResponse;
 import java.io.IOException;
 import java.util.UUID;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.xml.sax.SAXException;
@@ -65,8 +71,11 @@ public class ProMessageController {
     private final GeniusService geniusService;
     private final PromptRepository promptRepository;
     private final RAGService documentService;
+    
+    private final RAG2Service rag2Service;
+    
 
-    public ProMessageController(final ChatMessageService chatMessageService, final ObjectMapper objectMapper, final ProjectFileRepository projectFileRepository, final ChatSessionRepository chatSessionRepository, final ProjectRepository projectRepository, final ContentService contentService, final CustomUserDetailsService customUserDetailsService, final ProfessionalUserDetailsService professionalUserDetailsService, final ProductRepository productRepository, final GeniusService geniusService, tech.intellibio.augi4.user.UserRepository userRepository, tech.intellibio.augi4.professional.ClaudeService claudeService, tech.intellibio.augi4.chat_message.ChatMessageRepository messageRepository, final PromptRepository promptRepository, tech.intellibio.augi4.professional.RAGService documentService) {
+    public ProMessageController(final ChatMessageService chatMessageService, final ObjectMapper objectMapper, final ProjectFileRepository projectFileRepository, final ChatSessionRepository chatSessionRepository, final ProjectRepository projectRepository, final ContentService contentService, final CustomUserDetailsService customUserDetailsService, final ProfessionalUserDetailsService professionalUserDetailsService, final ProductRepository productRepository, final GeniusService geniusService, tech.intellibio.augi4.user.UserRepository userRepository, tech.intellibio.augi4.professional.ClaudeService claudeService, tech.intellibio.augi4.chat_message.ChatMessageRepository messageRepository, final PromptRepository promptRepository, tech.intellibio.augi4.professional.RAGService documentService, tech.intellibio.augi4.professional.RAG2Service rag2Service) {
         this.chatMessageService = chatMessageService;
         this.objectMapper = objectMapper;
         this.projectFileRepository = projectFileRepository;
@@ -81,6 +90,7 @@ public class ProMessageController {
         this.messageRepository = messageRepository;
         this.promptRepository = promptRepository;
         this.documentService = documentService;
+        this.rag2Service = rag2Service;
     }
 
     @InitBinder
@@ -113,6 +123,8 @@ public class ProMessageController {
 //           model.addAttribute("plan", plan);
     }
     private List<ProMessageDTO> chatMessages = new ArrayList<>();
+    
+    
 
     //Document search 
     @GetMapping("/document")
@@ -142,6 +154,27 @@ public class ProMessageController {
         return "professional/dchat";
     }
     
+    
+    @PostMapping("/send")
+    @ResponseBody
+    public ResponseEntity<String> sendMessage(@RequestParam String message, @RequestParam String sessionId) {
+        
+        String sysPrompt = " Your an AI  RAG expert ";
+        
+        try {
+            String response = rag2Service.getResponse(
+               message, sysPrompt
+            );
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error processing your request");
+        }
+    }
+    
+
+
+    
      @GetMapping(value = "/dstream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter dchat(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String message, @RequestParam String sessionId)
             throws SQLException {
@@ -155,7 +188,7 @@ public class ProMessageController {
         return claudeService.streamResponse(sessionId, newMessage, user);
     }
     
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter chat(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String message, @RequestParam String sessionId)
             throws SQLException {

@@ -1,23 +1,52 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{loginLayout}">
+      layout:decorate="~{professional/loginLayout}">
     <head>
         <title>[[#{authentication.professionalLogin.headline}]]</title>
     </head>
-    <body>
-        <div layout:fragment="content">
-            <h1 class="mb-4">[[#{authentication.professionalLogin.headline}]]</h1>
-            <div th:replace="~{fragments/forms::globalErrors('authentication')}" />
-            <form th:action="${requestUri}" method="post">
-                <div th:replace="~{fragments/forms::inputRow(object='authentication', field='email', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='authentication', field='password', required=true, type='password')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='authentication', field='rememberMe', type='checkbox')}" />
-                <input type="submit" th:value="#{authentication.professionalLogin.headline}" class="btn btn-primary mt-4" />
-            </form>
-            <p class="mt-5">
-                <span>[[#{authentication.registerNow}]]</span>
-                <a th:href="@{/professional/register}">[[#{authentication.registerNow.link}]]</a>
-            </p>
+
+    <div layout:fragment="content">
+        <div th:replace="~{fragments/forms::globalErrors('authentication')}" />
+
+
+        <div class="text-center mb-4">
+            <a href="." class="navbar-brand navbar-brand-autodark">
+                <img th:src="@{/images/logo.png}" th:alt="#{app.title}" width="110" height="32" class="navbar-brand-image">
+
+            </a>
         </div>
-    </body>
-</html>
+        <div class="card card-md">
+            <div class="card-body">
+                <h2 class="h2 text-center mb-4">Intellibio Login</h2>
+                <form th:action="${requestUri}" method="post">
+                    <div class="mb-3">
+
+                        <div th:replace="~{fragments/forms::inputRow(object='authentication', field='email', required=true)}" />
+
+                    </div>
+                    <div class="mb-3">
+
+
+
+                        <div th:replace="~{fragments/forms::inputRow(object='authentication', field='password', required=true, type='password')}" />
+
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-check">
+                            <div th:replace="~{fragments/forms::inputRow(object='authentication', field='rememberMe', type='checkbox')}" />
+
+                        </label>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="text-center text-secondary mt-3">
+                Don't have account yet? <a th:href="@{/professional/register}">[[#{authentication.registerNow.link}]]</a>
+            </div>
+
+        </div>
+
+</html>            

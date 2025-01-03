@@ -134,7 +134,7 @@ document.querySelectorAll('.custom-link').forEach(function(link) {
     function sendMessage() {
 
         const sessionId = sessionInput.value;
-        console.log(sessionId);
+        //console.log(sessionId);
         const message = messageInput.value.trim();
         if (!message)
             return;
@@ -145,26 +145,49 @@ document.querySelectorAll('.custom-link').forEach(function(link) {
 
         // Create new div for assistant's response
         currentAssistantMessage = addChatMessageGG('');
-
-        // Start streaming response
-        const eventSource = new EventSource(`/professional/dstream?sessionId=${sessionId}&message=${encodeURIComponent(message)}`);
-
-        eventSource.onmessage = function (event) {
-            currentAssistantMessage.textContent += event.data + ' ';
+        
+        
+        
+        fetch(`/professional/send?message=${encodeURIComponent(message)}&sessionId=${encodeURIComponent(sessionId)}`, {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json'
+    }
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.text();
+})
+.then(data => {
+    //console.log('Success:', data);
+    currentAssistantMessage.textContent += data;
             chatContainer.scrollTop = chatContainer.scrollHeight;
-        };
+})
+.catch(error => {
+    console.error('Error:', error);
+});
 
-
-
-
-
-        eventSource.onerror = function (error) {
-            eventSource.close();
-            if (!currentAssistantMessage.textContent) {
-                currentAssistantMessage.textContent = 'Error: Failed to get response';
-                console.log(error);
-            }
-        };
+//        // Start streaming response
+//        const eventSource = new EventSource(`/professional/dstream?sessionId=${sessionId}&message=${encodeURIComponent(message)}`);
+//
+//        eventSource.onmessage = function (event) {
+//            currentAssistantMessage.textContent += event.data + ' ';
+//            chatContainer.scrollTop = chatContainer.scrollHeight;
+//        };
+//
+//
+//
+//
+//
+//        eventSource.onerror = function (error) {
+//            eventSource.close();
+//            if (!currentAssistantMessage.textContent) {
+//                currentAssistantMessage.textContent = 'Error: Failed to get response';
+//                console.log(error);
+//            }
+//        };
     }
 
 // Allow sending message with Enter key
