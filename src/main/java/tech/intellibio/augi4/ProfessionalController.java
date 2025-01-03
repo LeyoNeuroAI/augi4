@@ -20,11 +20,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import tech.intellibio.augi4.country.Country;
+import tech.intellibio.augi4.country.CountryRepository;
 import tech.intellibio.augi4.feedback.FeedbackDTO;
 import tech.intellibio.augi4.feedback.FeedbackService;
+import tech.intellibio.augi4.plan.Plan;
+import tech.intellibio.augi4.plan.PlanRepository;
 import tech.intellibio.augi4.product.Product;
 import tech.intellibio.augi4.product.ProductRepository;
+import tech.intellibio.augi4.project.Project;
+import tech.intellibio.augi4.project.ProjectDTO;
+import tech.intellibio.augi4.project.ProjectRepository;
+import tech.intellibio.augi4.project.ProjectService;
+import tech.intellibio.augi4.role.Role;
+import tech.intellibio.augi4.role.RoleRepository;
 import tech.intellibio.augi4.user.User;
+import tech.intellibio.augi4.user.UserDTO;
 import tech.intellibio.augi4.user.UserRepository;
 import tech.intellibio.augi4.user.UserService;
 import tech.intellibio.augi4.util.CustomCollectors;
@@ -42,6 +53,11 @@ public class ProfessionalController {
     private final FeedbackService feedbackService;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+     private final PlanRepository planRepository;
+    private final RoleRepository roleRepository;
+    private final CountryRepository countryRepository;
+    private final ProjectService projectService;
+    private final ProjectRepository projectRepository ;
 
 
   @ModelAttribute
@@ -52,26 +68,41 @@ public class ProfessionalController {
         model.addAttribute("productValues", productRepository.findAll(Sort.by("id"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(Product::getId, Product::getName)));
+        
+          model.addAttribute("planValues", planRepository.findAll(Sort.by("id"))
+                .stream()
+                .collect(CustomCollectors.toSortedMap(Plan::getId, Plan::getId)));
+        model.addAttribute("roleValues", roleRepository.findAll(Sort.by("id"))
+                .stream()
+                .collect(CustomCollectors.toSortedMap(Role::getId, Role::getDescription)));
+        model.addAttribute("countryValues", countryRepository.findAll(Sort.by("id"))
+                .stream()
+                .collect(CustomCollectors.toSortedMap(Country::getId, Country::getCode)));
     }
 
-    @GetMapping
-    public String list(@RequestParam(name = "filter", required = false) final String filter,
-            @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable,
-            final Model model) {
-        final Page<FeedbackDTO> feedbacks = feedbackService.findAll(filter, pageable);
-        model.addAttribute("feedbacks", feedbacks);
-        model.addAttribute("filter", filter);
-        model.addAttribute("paginationModel", WebUtils.getPaginationModel(feedbacks));
-        return "feedback/list";
-    }
+
+   
+    
+   
 
 private final UserService userService;
 
-    public ProfessionalController(final UserService userService, tech.intellibio.augi4.feedback.FeedbackService feedbackService, tech.intellibio.augi4.user.UserRepository userRepository, tech.intellibio.augi4.product.ProductRepository productRepository) {
+    public ProfessionalController(final UserService userService, tech.intellibio.augi4.feedback.FeedbackService feedbackService, tech.intellibio.augi4.user.UserRepository userRepository, tech.intellibio.augi4.product.ProductRepository productRepository, tech.intellibio.augi4.plan.PlanRepository planRepository,
+            tech.intellibio.augi4.role.RoleRepository roleRepository, 
+            tech.intellibio.augi4.country.CountryRepository countryRepository, 
+            tech.intellibio.augi4.project.ProjectService projectService, 
+           
+            tech.intellibio.augi4.project.ProjectRepository projectRepository) {
       this.userService = userService;
         this.feedbackService = feedbackService;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.planRepository = planRepository;
+        this.roleRepository = roleRepository;
+        this.countryRepository = countryRepository;
+        this.projectService = projectService;
+      
+        this.projectRepository = projectRepository;
     }
  
     
@@ -81,7 +112,24 @@ private final UserService userService;
     }
     
      @GetMapping("/professional/index")
-    public String index() {
+    public String indexP(final String filter,
+            @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable,
+            final Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        
+        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+
+//        final Page<Project> projects = projectRepository.findAllByUser( user, pageable);
+//        model.addAttribute("projects", projects);
+//        model.addAttribute("filter", filter);
+//        model.addAttribute("paginationModel", WebUtils.getPaginationModel(projects));
+ final Page<ProjectDTO> projects = projectService.findAll(filter, pageable);
+         //System.out.println(projects.getNumberOfElements()); 
+                
+        model.addAttribute("projects", projects);
+        model.addAttribute("filter", filter);
+        model.addAttribute("paginationModel", WebUtils.getPaginationModel(projects));
+
+
         return "professional/index";
     }
     
@@ -113,12 +161,25 @@ private final UserService userService;
         return "redirect:/professional/feedback";
     }
    
-     @GetMapping("professional/user/{id}")
+     @GetMapping("/professional/user/{id}")
     public String edit(@PathVariable(name = "id") final Long id, final Model model) {
         model.addAttribute("user", userService.get(id));
         return "professional/user_edit";
     }
     
+    
+    
+    @PostMapping("/professional/user/{id}")
+    public String editU(@PathVariable(name = "id") final Long id,
+            @ModelAttribute("user") @Valid final UserDTO userDTO, final BindingResult bindingResult,
+            final RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "professional/user_edit";
+        }
+        userService.update(id, userDTO);
+        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.update.success"));
+        return "professional/user_edit";
+    }
     
     
     

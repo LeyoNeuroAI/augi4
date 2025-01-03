@@ -11,6 +11,8 @@ import tech.intellibio.augi4.user.User;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Page<Project> findAllById(Long id, Pageable pageable);
+    
+      Page<Project> findAllByUser(User user, Pageable pageable);
 
     Project findFirstByUser(User user);
 
