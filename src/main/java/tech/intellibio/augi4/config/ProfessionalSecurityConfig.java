@@ -51,7 +51,7 @@ public class ProfessionalSecurityConfig {
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/professional/register", "/professional/terms", "/professional/login", "/logout")
+                .requestMatchers("/professional/register",  "/professional/terms", "/professional/login", "/logout")
                 .permitAll()
                 .requestMatchers("/countries", "GET")
                 .hasAuthority(UserRoles.PROFESSIONAL)
