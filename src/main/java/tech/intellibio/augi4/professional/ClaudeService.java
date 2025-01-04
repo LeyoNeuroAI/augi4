@@ -154,7 +154,7 @@ chatMessage.setMessage(messages);
                 headers.set("Accept", "text/event-stream");
                 
                 List<Map<String, String>> messages = chatMessage.getMessage();
-                printMessagesAsJson( messages);
+                //printMessagesAsJson( messages);
 
                 // Create request body
                 Map<String, Object> requestBody = Map.of(

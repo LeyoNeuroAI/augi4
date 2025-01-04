@@ -1,17 +1,13 @@
 package tech.intellibio.augi4.professional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import tech.intellibio.augi4.chat_message.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.langchain4j.model.chat.request.ChatRequest;
-import dev.langchain4j.model.chat.response.ChatResponse;
 import java.io.IOException;
 import java.util.UUID;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -23,13 +19,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -176,18 +170,24 @@ public class ProMessageController {
 
 
     
-//     @GetMapping(value = "/dstream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//    public SseEmitter dchat(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String message, @RequestParam String sessionId)
-//            throws SQLException {
-//
-//        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
-//        
-//       String newMessage =  documentService.rag(message, sessionId);
-//
-//        System.out.println(newMessage);
-//
-//        return claudeService.streamResponse(sessionId, newMessage, user);
-//    }
+     @GetMapping(value = "/dstream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter dchat(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String message, @RequestParam String sessionId)
+            throws SQLException {
+
+        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+        
+        
+            Product product = productRepository.findByName("DocumentSearch")
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+         
+         Prompt prompts = promptRepository.findFirstByPromptProducts(product);
+        
+       String newMessage =  documentService.rag(message, sessionId);
+
+        System.out.println(newMessage);
+
+        return claudeService.streamResponse(sessionId, newMessage, user, prompts);
+    }
     
    
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

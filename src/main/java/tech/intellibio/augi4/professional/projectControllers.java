@@ -110,7 +110,7 @@ public class projectControllers {
 
         String completePrompt;
         
-        System.out.println(chainPreviousChapter);
+        //System.out.println(chainPreviousChapter);
 
         User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
 
@@ -152,7 +152,7 @@ public class projectControllers {
             completePrompt = invisiblePrompt + "\n" + message;
         }
         
-        System.out.println(completePrompt);
+        //System.out.println(completePrompt);
         
      return claudeService.streamResponse(sessionId, completePrompt, user, prompts);
     }
@@ -333,7 +333,7 @@ public class projectControllers {
     }
 
     private Project createProject(ProjectDTO projectDTO, User user) {
-        System.out.println(projectDTO.getProgam());
+        //System.out.println(projectDTO.getProgam());
         Program program = programRepository.findById(projectDTO.getProgam()).
                 orElseThrow(() -> new RuntimeException("Program not found"));
 
@@ -363,7 +363,7 @@ public class projectControllers {
             if (noOfChapters != null && noOfChapters > 0) {
                 for (int i = 0; i <= noOfChapters; i++) {
                     ProjectFile file = new ProjectFile();
-                    System.out.println(i);
+                    //System.out.println(i);
                     Prompt prompt = promptRepository.findByChapterNoAndProgram(i, program).
                             orElseThrow(() -> new RuntimeException("Prompt not found"));
 
@@ -382,7 +382,7 @@ public class projectControllers {
 //                // Save the project again to persist the files
 //                savedProject = projectService.saveProject(savedProject);
                 // Log the number of saved files for debugging
-                System.out.println("Number of files saved: " + savedFiles.size());
+                //System.out.println("Number of files saved: " + savedFiles.size());
             }
 
         } catch (Exception e) {
