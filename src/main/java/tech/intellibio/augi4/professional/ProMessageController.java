@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -285,15 +286,15 @@ public class ProMessageController {
 
         List<ChatHistoryDTO> chatHistoryDTOL = new ArrayList<>();
 
-        for (String json : chatMessage.getMessage()) {
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                ChatHistoryDTO chatHistoryDTO = mapper.readValue(json, ChatHistoryDTO.class);
-                chatHistoryDTOL.add(chatHistoryDTO);
-            } catch (JsonProcessingException e) {
-                // Handle the exception
-            }
-        }
+//        for (Map<String, String> message : chatMessage.getMessage()) {
+//            ObjectMapper mapper = new ObjectMapper();
+//            try {
+//                ChatHistoryDTO chatHistoryDTO = mapper.readValue(message, ChatHistoryDTO.class);
+//                chatHistoryDTOL.add(chatHistoryDTO);
+//            } catch (JsonProcessingException e) {
+//                // Handle the exception
+//            }
+//        }
 
         User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
         // Retrieve the user's chat sessions

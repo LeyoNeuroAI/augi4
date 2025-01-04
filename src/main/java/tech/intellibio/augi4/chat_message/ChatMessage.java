@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
@@ -42,7 +43,7 @@ public class ChatMessage {
 
     @Column(nullable = false, columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
-    private List<String> message;
+   private List<Map<String, String>> message;
 
     @Column
     private Integer tokens;
@@ -75,13 +76,15 @@ public class ChatMessage {
         this.id = id;
     }
 
-    public List<String> getMessage() {
+    public List<Map<String, String>> getMessage() {
         return message;
     }
 
-    public void setMessage(final List<String> message) {
+    public void setMessage(List<Map<String, String>> message) {
         this.message = message;
     }
+
+  
 
     public Integer getTokens() {
         return tokens;

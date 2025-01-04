@@ -3,6 +3,7 @@ package tech.intellibio.augi4.chat_message;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
+import java.util.Map;
 
 
 public class ChatMessageDTO {
@@ -10,7 +11,7 @@ public class ChatMessageDTO {
     private Integer id;
 
     @NotNull
-    private List<@Size(max = 255) String> message;
+   private List<Map<String, String>> message;
 
     private Integer tokens;
 
@@ -29,13 +30,15 @@ public class ChatMessageDTO {
         this.id = id;
     }
 
-    public List<String> getMessage() {
+    public List<Map<String, String>> getMessage() {
         return message;
     }
 
-    public void setMessage(final List<String> message) {
+    public void setMessage(List<Map<String, String>> message) {
         this.message = message;
     }
+
+  
 
     public Integer getTokens() {
         return tokens;

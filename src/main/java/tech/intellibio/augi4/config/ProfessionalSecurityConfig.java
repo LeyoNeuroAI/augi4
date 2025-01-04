@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -48,8 +49,8 @@ public class ProfessionalSecurityConfig {
             @Value("${professional.rememberMeKey}") final String rememberMeKey,
             final ProfessionalUserDetailsService professionalUserDetailsService) throws Exception {
        return http.securityMatcher("/feedbacks/**", "/professional/**")
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
+       .cors(withDefaults())
+                .csrf(withDefaults())
         .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/professional/register",  "/professional/terms", "/professional/login", "/logout")
                 .permitAll()

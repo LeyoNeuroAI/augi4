@@ -16,29 +16,24 @@ package tech.intellibio.augi4.professional;
  *
  * @author leonard
  */
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.UUID;
 import java.net.http.HttpClient;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
@@ -95,27 +90,53 @@ public class ClaudeService {
         this.productRepository = productRepository;
 
     }
+    
+    ObjectMapper mapper = new ObjectMapper();
+    
+//     List<Map<String, String>> messages = new ArrayList<>();
+    
+   
 
     public SseEmitter streamResponse(String sessionId, String content, User user) throws SQLException {
 
 //        Product product = productRepository.findByName("GrantGenius")
 //                .orElseThrow(() -> new RuntimeException("Product not found"));
+        //System.out.println( chatData1.size());
+        
+                ChatSession session = sessionRepository.findBySessionId(sessionId);
 
-        Map<String, Object> chatData1 = new HashMap<>();
+        
+         ChatMessage chatMessage = messageRepository.findBySession(session)
+                                          .orElseGet(() -> {
+                                              ChatMessage newChatMessage = new ChatMessage();
+                                              newChatMessage.setSession(session);
+                                              newChatMessage.setMessage(new ArrayList<>());
+                                              return newChatMessage;
+                                          });
+         
+          List<Map<String, String>> messages = chatMessage.getMessage();
+        Map<String, String> chatData1 = new HashMap<>();
+        
         chatData1.put("role", "user");
         chatData1.put("content", content);
 
-        ChatSession session = sessionRepository.findBySessionId(sessionId);
 
+        messages.add(chatData1);
         
+//        // Convert the list to a JsonNode
+//List<JsonNode> jsonMessages = mapper.valueToTree(messages);
 
-        appendChatHistory(session, chatData1);
+chatMessage.setMessage(messages);
+        messageRepository.save(chatMessage); // persist the updated object to the database
 
-        return callClaudeAPI(session);
+
+//        appendChatHistory(session, chatData1);
+
+        return callClaudeAPI(chatMessage);
 
     }
 
-    public SseEmitter callClaudeAPI(ChatSession chatSession) {
+    public SseEmitter callClaudeAPI(ChatMessage chatMessage) {
         SseEmitter emitter = new SseEmitter(-1L); // No timeout
 
         String systemPrompt = "You are an AI expert";
@@ -130,6 +151,9 @@ public class ClaudeService {
                 headers.set("x-api-key", apiKey);
                 headers.set("anthropic-version", apiVersion);
                 headers.set("Accept", "text/event-stream");
+                
+                List<Map<String, String>> messages = chatMessage.getMessage();
+                printMessagesAsJson( messages);
 
                 // Create request body
                 Map<String, Object> requestBody = Map.of(
@@ -138,7 +162,7 @@ public class ClaudeService {
                         "temperature", 0.7,
                         "stream", true, // Important for streaming
                         "system", systemPrompt,
-                        "messages", getChatHistory(chatSession)
+                        "messages", chatMessage.getMessage()
                 );
 
               
@@ -163,11 +187,14 @@ public class ClaudeService {
                         }
 
                         emitter.complete();
+                        
 
-                        Map<String, Object> chatData2 = new HashMap<>();
+                        Map<String, String> chatData2 = new HashMap<>();
                         chatData2.put("role", "assistant");
                         chatData2.put("content", assistantContent.toString());
-                        appendChatHistory(chatSession, chatData2);
+                        //appendChatHistory(chatSession, chatData2);
+                        messages.add(chatData2);
+                        messageRepository.save(chatMessage); 
 
                     }
                     return null;
@@ -191,61 +218,85 @@ public class ClaudeService {
 
         return emitter;
     }
-
- @Transactional
-public void appendChatHistory(ChatSession session, Map<String, Object> chatData) {
-    try {
-       ChatMessage chatMessage = messageRepository.findBySession(session)
-                                          .orElseGet(() -> {
-                                              ChatMessage newChatMessage = new ChatMessage();
-                                              newChatMessage.setSession(session);
-                                              newChatMessage.setMessage(new ArrayList<>());
-                                              return newChatMessage;
-                                          });
-
-        String jsonString;
-        try {
-            jsonString = objectMapper.writeValueAsString(chatData);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting chat data to JSON", e);
+    
+    
+    
+    public static void printMessagesAsJson(List<Map<String, String>> messages) {
+        if (messages.isEmpty()) {
+            System.out.println("\nNo messages yet!");
+            return;
         }
-        List<String> messages = chatMessage.getMessage();
-        if (messages == null) {
-            messages = new ArrayList<>();
-            chatMessage.setMessage(messages);
-        }
-        messages.add(jsonString);
-        messageRepository.save(chatMessage); // persist the updated object to the database
-       
-    } catch (Exception e) {
-        throw new RuntimeException("Error appending chat data to ChatMessage entity", e);
-    }
-}
-
-
-
-    public List<Map<String, Object>> getChatHistory(ChatSession session) {
         
-        ChatMessage chatMessage = messageRepository.findBySession(session)
-                                          .orElseGet(() -> {
-                                              ChatMessage newChatMessage = new ChatMessage();
-                                              newChatMessage.setSession(session);
-                                              newChatMessage.setMessage(new ArrayList<>());
-                                              return newChatMessage;
-                                          });
-        List<Map<String, Object>> chatHistory = new ArrayList<>();
-
-        for (String jsonString : chatMessage.getMessage()) {
-            try {
-                Map<String, Object> chatData = objectMapper.readValue(jsonString, Map.class);
-                chatHistory.add(chatData);
-            } catch (Exception e) {
-                throw new RuntimeException("Error parsing chat message JSON", e);
+        System.out.println("{\n    \"messages\": [");
+        for (int i = 0; i < messages.size(); i++) {
+            Map<String, String> message = messages.get(i);
+            System.out.println("        {");
+            System.out.println("            \"role\": \"" + message.get("role") + "\",");
+            System.out.println("            \"content\": \"" + message.get("content") + "\"");
+            System.out.print("        }");
+            if (i < messages.size() - 1) {
+                System.out.println(",");
+            } else {
+                System.out.println();
             }
         }
-
-        return chatHistory;
+        System.out.println("    ]\n}");
     }
+//
+// @Transactional
+//public void appendChatHistory(ChatSession session, Map<String, Object> chatData) {
+//    try {
+//       ChatMessage chatMessage = messageRepository.findBySession(session)
+//                                          .orElseGet(() -> {
+//                                              ChatMessage newChatMessage = new ChatMessage();
+//                                              newChatMessage.setSession(session);
+//                                              newChatMessage.setMessage(new ArrayList<>());
+//                                              return newChatMessage;
+//                                          });
+//
+//        String jsonString;
+//        try {
+//            jsonString = objectMapper.writeValueAsString(chatData);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException("Error converting chat data to JSON", e);
+//        }
+//        List<String> messages = chatMessage.getMessage();
+//        if (messages == null) {
+//            messages = new ArrayList<>();
+//            chatMessage.setMessage(messages);
+//        }
+//        messages.add(jsonString);
+//        messageRepository.save(chatMessage); // persist the updated object to the database
+//       
+//    } catch (Exception e) {
+//        throw new RuntimeException("Error appending chat data to ChatMessage entity", e);
+//    }
+//}
+
+
+
+//    public List<Map<String, Object>> getChatHistory(ChatSession session) {
+//        
+//        ChatMessage chatMessage = messageRepository.findBySession(session)
+//                                          .orElseGet(() -> {
+//                                              ChatMessage newChatMessage = new ChatMessage();
+//                                              newChatMessage.setSession(session);
+//                                              newChatMessage.setMessage(new ArrayList<>());
+//                                              return newChatMessage;
+//                                          });
+//        List<Map<String, Object>> chatHistory = new ArrayList<>();
+//
+//        for (String jsonString : chatMessage.getMessage()) {
+//            try {
+//                Map<String, Object> chatData = objectMapper.readValue(jsonString, Map.class);
+//                chatHistory.add(chatData);
+//            } catch (Exception e) {
+//                throw new RuntimeException("Error parsing chat message JSON", e);
+//            }
+//        }
+//
+//        return chatHistory;
+//    }
 
     private void processStreamData(String line, SseEmitter emitter) {
         try {
