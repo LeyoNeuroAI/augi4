@@ -154,7 +154,7 @@ public class projectControllers {
         
         System.out.println(completePrompt);
         
-     return claudeService.streamResponse(sessionId, completePrompt, user);
+     return claudeService.streamResponse(sessionId, completePrompt, user, prompts);
     }
 
     @ModelAttribute

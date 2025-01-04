@@ -176,29 +176,34 @@ public class ProMessageController {
 
 
     
-     @GetMapping(value = "/dstream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter dchat(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String message, @RequestParam String sessionId)
-            throws SQLException {
-
-        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
-        
-       String newMessage =  documentService.rag(message, sessionId);
-
-        System.out.println(newMessage);
-
-        return claudeService.streamResponse(sessionId, newMessage, user);
-    }
+//     @GetMapping(value = "/dstream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//    public SseEmitter dchat(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String message, @RequestParam String sessionId)
+//            throws SQLException {
+//
+//        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+//        
+//       String newMessage =  documentService.rag(message, sessionId);
+//
+//        System.out.println(newMessage);
+//
+//        return claudeService.streamResponse(sessionId, newMessage, user);
+//    }
     
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+   
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter chat(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String message, @RequestParam String sessionId)
             throws SQLException {
 
         User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+        
+         Product product = productRepository.findByName("GrantGenius")
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+         
+         Prompt prompts = promptRepository.findFirstByPromptProducts(product);
 
         //System.out.println(sessionId);
 
-        return claudeService.streamResponse(sessionId, message, user);
+        return claudeService.streamResponse(sessionId, message, user, prompts);
     }
 
     @GetMapping("/genius/{name}")

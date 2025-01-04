@@ -45,6 +45,7 @@ import tech.intellibio.augi4.chat_session.ChatSessionRepository;
 import tech.intellibio.augi4.chat_session.ChatSessionService;
 import tech.intellibio.augi4.product.Product;
 import tech.intellibio.augi4.product.ProductRepository;
+import tech.intellibio.augi4.prompt.Prompt;
 import tech.intellibio.augi4.user.User;
 
 @Service
@@ -97,7 +98,7 @@ public class ClaudeService {
     
    
 
-    public SseEmitter streamResponse(String sessionId, String content, User user) throws SQLException {
+    public SseEmitter streamResponse(String sessionId, String content, User user,  Prompt prompts) throws SQLException {
 
 //        Product product = productRepository.findByName("GrantGenius")
 //                .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -132,14 +133,14 @@ chatMessage.setMessage(messages);
 
 //        appendChatHistory(session, chatData1);
 
-        return callClaudeAPI(chatMessage);
+        return callClaudeAPI(chatMessage, prompts);
 
     }
 
-    public SseEmitter callClaudeAPI(ChatMessage chatMessage) {
+    public SseEmitter callClaudeAPI(ChatMessage chatMessage, Prompt prompts) {
         SseEmitter emitter = new SseEmitter(-1L); // No timeout
 
-        String systemPrompt = "You are an AI expert";
+        String systemPrompt = prompts.getSystemPrompt();
 
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
