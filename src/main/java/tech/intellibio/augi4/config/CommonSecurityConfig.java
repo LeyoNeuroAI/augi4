@@ -32,9 +32,9 @@ public class CommonSecurityConfig {
     @Order(10)
     public SecurityFilterChain logoutFilterChain(final HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/logout")
+                .securityMatcher("/professional/logout")
                 .logout(logout -> logout
-                    .logoutUrl("/logout")
+                    .logoutUrl("/professional/logout")
                     .logoutSuccessUrl("/professional/login?logoutSuccess=true")
                     .deleteCookies("SESSION"))
                 .build();
