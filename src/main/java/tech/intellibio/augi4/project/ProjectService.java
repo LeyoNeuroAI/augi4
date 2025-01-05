@@ -61,7 +61,17 @@ public class ProjectService {
                 pageable, page.getTotalElements());
     }
     
-    
+    public Page<ProjectDTO> findByUser(final User user, final Pageable pageable) {
+       
+        
+       Page<Project> page = projectRepository.findAllByUser(user, pageable);
+
+        return new PageImpl<>(page.getContent()
+                .stream()
+                .map(project -> mapToDTO(project, new ProjectDTO()))
+                .toList(),
+                pageable, page.getTotalElements());
+    }
     
 
     public ProjectDTO get(final Long id) {

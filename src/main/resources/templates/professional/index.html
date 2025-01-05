@@ -22,13 +22,7 @@
                     <h3 class="card-title">[[#{project.list.headline}]]</h3>
                 </div>
         
-                <div  th:if="${!projects.empty || filter != null}" class="card-body border-bottom py-3">
-                    <div class="d-flex">
-                        <div th:replace="~{fragments/utils::sorting(object='project', sortOptions=${ {'id,ASC', 'file,ASC', 'goal,ASC'} }, columnClass='offset-lg-4')}" />
-                        <div th:replace="~{fragments/utils::searchFilter(object='project')}" />
-
-                   
-            </div>
+               
             <div th:if="${projects.empty}">[[#{project.list.empty}]]</div>
             <div th:if="${!projects.empty}" class="table-responsive">
 
@@ -45,6 +39,7 @@
 
                             <th scope="col">[[#{project.status.label}]]</th>
                             <th scope="col">[[#{project.progam.label}]]</th>
+                            <th><!-- --></th>
 
                          
                         </tr>
@@ -64,7 +59,12 @@
 
                             <td>[[${project.progam}]]</td>
 
-                            
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/professional/genie/grant/edit/{id}(id=${project.id})}" class="btn btn-sm btn-secondary">view</a>
+                                    
+                                </div>
+                            </td>
                         </tr>
 
 

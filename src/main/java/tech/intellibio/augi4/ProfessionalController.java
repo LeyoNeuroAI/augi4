@@ -118,15 +118,15 @@ private final UserService userService;
         
         User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
 
-//        final Page<Project> projects = projectRepository.findAllByUser( user, pageable);
+        final Page<ProjectDTO> projects= projectService.findByUser( user, pageable);
 //        model.addAttribute("projects", projects);
 //        model.addAttribute("filter", filter);
 //        model.addAttribute("paginationModel", WebUtils.getPaginationModel(projects));
- final Page<ProjectDTO> projects = projectService.findAll(filter, pageable);
+// final Page<ProjectDTO> projects = projectService.findAll(filter, pageable);
          //System.out.println(projects.getNumberOfElements()); 
                 
         model.addAttribute("projects", projects);
-        model.addAttribute("filter", filter);
+//        model.addAttribute("filter", filter);
         model.addAttribute("paginationModel", WebUtils.getPaginationModel(projects));
 
 

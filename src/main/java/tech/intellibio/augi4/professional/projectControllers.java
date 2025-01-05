@@ -62,6 +62,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import tech.intellibio.augi4.professional.ClaudeService;
+import tech.intellibio.augi4.util.AccessDeniedException;
 
 /**
  *
@@ -93,6 +94,13 @@ public class projectControllers {
         this.productRepository = productRepository;
         this.claudeService = claudeService;
 
+    }
+    
+    // Method to check if the user has access to the project
+    private boolean hasAccessToProject(User user, Project project) {
+        // Implement your access logic here
+        // For example, check if the user is associated with the project
+        return project.getUser().equals(user); // Example logic
     }
     
    
@@ -208,6 +216,8 @@ public class projectControllers {
 
         Product product = productRepository.findByName("GrantGenie")
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+        
+        
 
         // Generate a new session ID
         String sessionId = UUID.randomUUID().toString();
@@ -230,6 +240,11 @@ public class projectControllers {
 
         Project project = projectRepository.findById(id).
                 orElseThrow(() -> new RuntimeException("Project not found"));
+        
+        if (!hasAccessToProject(user, project)) {
+            // Throw an exception to trigger the error handling mechanism
+            throw new AccessDeniedException("Access denied to project with ID: " + id);
+        }
 
         List<ProjectFile> projectFiles = projectFilesRepository.findByFile(project);
 
@@ -245,9 +260,17 @@ public class projectControllers {
     }
 
     @PostMapping("/grant/edit/file/{id}/{fileId}")
-    public String editFilep(Model model, @PathVariable Long fileId, @PathVariable Long id, @RequestParam("content") String content) {
+    public String editFilep(Model model, @PathVariable Long fileId, @PathVariable Long id, @RequestParam("content") String content,
+            @AuthenticationPrincipal UserDetails userDetails) {
         Project project = projectRepository.findById(id).
                 orElseThrow(() -> new RuntimeException("Project not found"));
+                        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+
+        
+        if (!hasAccessToProject(user, project)) {
+            // Throw an exception to trigger the error handling mechanism
+            throw new AccessDeniedException("Access denied to project with ID: " + id);
+        }
 
         List<ProjectFile> projectFiles = projectFilesRepository.findByFile(project);
 
@@ -269,9 +292,17 @@ public class projectControllers {
 
 // File download
 @GetMapping(value = "/grant/edit/file/{id}/{fileId}/export", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<ByteArrayResource> exportToWord(@PathVariable Long id, HttpServletRequest request) throws TikaException, IOException {
+    public ResponseEntity<ByteArrayResource> exportToWord(@PathVariable Long id, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) throws TikaException, IOException {
         Project project = projectRepository.findById(id).
                 orElseThrow(() -> new RuntimeException("Project not found"));
+        
+                        User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+
+        
+        if (!hasAccessToProject(user, project)) {
+            // Throw an exception to trigger the error handling mechanism
+            throw new AccessDeniedException("Access denied to project with ID: " + id);
+        }
 
         List<ProjectFile> projectFiles = projectFilesRepository.findByFile(project);
 
@@ -319,10 +350,18 @@ public class projectControllers {
 
 
     @GetMapping("/grant/edit/{id}")
-    public String edit(Model model, @PathVariable Long id) {
+    public String edit(Model model, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
 
         Project project = projectRepository.findById(id).
                 orElseThrow(() -> new RuntimeException("Project not found"));
+        
+                User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
+
+        
+         if (!hasAccessToProject(user, project)) {
+            // Throw an exception to trigger the error handling mechanism
+            throw new AccessDeniedException("Access denied to project with ID: " + id);
+        }
 
         List<ProjectFile> projectFiles = projectFilesRepository.findByFile(project);
 
