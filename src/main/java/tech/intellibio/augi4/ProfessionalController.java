@@ -71,7 +71,7 @@ public class ProfessionalController {
         
           model.addAttribute("planValues", planRepository.findAll(Sort.by("id"))
                 .stream()
-                .collect(CustomCollectors.toSortedMap(Plan::getId, Plan::getId)));
+                .collect(CustomCollectors.toSortedMap(Plan::getId, Plan::getName)));
         model.addAttribute("roleValues", roleRepository.findAll(Sort.by("id"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(Role::getId, Role::getDescription)));
@@ -178,7 +178,7 @@ private final UserService userService;
         }
         userService.update(id, userDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.update.success"));
-        return "professional/user_edit";
+        return "redirect:/professional/user/"+ id;
     }
     
     

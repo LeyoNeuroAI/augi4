@@ -1,6 +1,8 @@
 package tech.intellibio.augi4.security;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import tech.intellibio.augi4.user.UserEmailUnique;
 
@@ -10,6 +12,8 @@ public class ProfessionalRegistrationRequest {
     @NotNull
     @Size(max = 255)
     @UserEmailUnique(message = "{registration.register.taken}")
+    @Email(message = "Email should be valid")
+
     private String email;
 
 
@@ -24,6 +28,8 @@ public class ProfessionalRegistrationRequest {
 
     @NotNull
     @Size(max = 72)
+      @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$", 
+             message = "Password must be at least 8 characters long, contain both letters and numbers and one Upper case letter")
     private String password;
 
 

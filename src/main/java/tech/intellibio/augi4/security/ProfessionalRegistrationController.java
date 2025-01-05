@@ -47,7 +47,7 @@ public class ProfessionalRegistrationController {
 
         model.addAttribute("planValues", planRepository.findAll(Sort.by("id"))
                 .stream()
-                .collect(CustomCollectors.toSortedMap(Plan::getId, Plan::getProject)));
+                .collect(CustomCollectors.toSortedMap(Plan::getId, Plan::getName)));
     }
 
     @GetMapping("/professional/register")

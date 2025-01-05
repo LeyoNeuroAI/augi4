@@ -6,31 +6,76 @@
     </head>
 
     <div layout:fragment="content">
-        <div class="d-flex flex-wrap mb-4">
-            <h1 class="flex-grow-1">[[#{user.edit.headline}]]</h1>
+
+        <div class="page page-center">
+            <div class="container container-tight py-4">
+                <div class="d-flex flex-wrap mb-4">
+                    <h1 class="flex-grow-1">[[#{user.edit.headline}]]</h1>
+
+                </div>
+
+
+                <div th:replace="~{fragments/forms::globalErrors('user')}" />
+
+
+
+                <form  class="card card-md" th:action="${requestUri}" method="post" th:object="${user}">
+
+
+                    <div class="card-body"> 
+                      
+                        <div class="mb-3"  >
+                            <div th:replace="~{fragments/forms::inputRow(object='user', field='email', required=true)}" />
+                        </div>
+                       
+                        <div class="mb-3">
+                            <div th:replace="~{fragments/forms::inputRow(object='user', field='name', required=true)}" />
+                        </div>
+                        <div class="mb-3">
+                            <div th:replace="~{fragments/forms::inputRow(object='user', field='organisation', required=true)}" />
+                        </div>
+                        <div class="mb-3">
+                            
+                            
+                           
+                            <div th:replace="~{fragments/forms::inputRow(object='user', field='password', required=true, type='password')}" />
+                       
+
+                      
+                        <input type="hidden" th:field="*{stripeCustomerId}" class="form-control"  />
+                        <input type="hidden" th:field="*{stripeSubscriptionId}" class="form-control"  />
+                        <input type="hidden" th:field="*{subscriptionStatus}" class="form-control" />
+                         <input type="hidden" th:field="*{terms}" class="form-control"  />
+                               
+                               <input type="hidden" th:field="*{refer}" class="form-control" />
+                                <input type="hidden" th:field="*{role}" class="form-control" />
+                                 <input type="hidden" th:field="*{isActive}" class="form-control" />
+                                 <input type="hidden" th:field="*{id}" class="form-control" />
+                    </div>
+                   
+                  
+                    <div class="mb-3">
+                        <div th:replace="~{fragments/forms::inputRow(object='user', field='plan', type='select')}" />
+                    </div>
+                   
+                    <div class="mb-3">
+                        <div th:replace="~{fragments/forms::inputRow(object='user', field='country', type='select')}" />
+                    </div>
+
+                    <div class="form-footer">
+
+
+
+
+                        <button type="submit" th:text="#{user.edit.headline}" class="btn btn-primary w-100"></button>
+                    </div>
+
+            </div>
+
+            </form>
 
         </div>
-        <div th:replace="~{fragments/forms::globalErrors('user')}" />
-        <form th:action="${requestUri}" method="post">
-            <input type="submit" th:value="#{user.edit.headline}" class="btn btn-primary mt-4 mb-4" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='id', disabled=true, type='number')}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='email', required=true)}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='isActive', type='checkbox')}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='name', required=true)}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='organisation', required=true)}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='password', required=true, type='password')}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='stripeCustomerId')}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='stripeSubscriptionId')}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='subscriptionStatus')}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='refer')}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='terms', type='checkbox')}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='plan', type='select')}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='role', required=true, type='select')}" />
-            <div th:replace="~{fragments/forms::inputRow(object='user', field='country', type='select')}" />
-            <input type="submit" th:value="#{user.edit.headline}" class="btn btn-primary mt-4" />
-        </form>
     </div>
 </div>
-
 
 </html>
