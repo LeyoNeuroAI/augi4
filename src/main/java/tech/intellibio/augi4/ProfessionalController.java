@@ -111,7 +111,7 @@ private final UserService userService;
         return "professional/terms";
     }
     
-     @GetMapping("/professional/index")
+      @GetMapping({"/professional", "/professional/index"})
     public String indexP(final String filter,
             @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable,
             final Model model, @AuthenticationPrincipal UserDetails userDetails) {

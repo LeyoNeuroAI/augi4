@@ -205,7 +205,7 @@ public class RAGService {
         vectorString.append(']');
 ////        
 //
-        System.out.println(vectorString.toString());
+        //System.out.println(vectorString.toString());
 
         List<String> documentsContent = new ArrayList();
 
@@ -223,7 +223,7 @@ public class RAGService {
                 String document = rs.getString("content"); // Replace with your actual column name
                 // Add more fields as necessary
                 documentsContent.add(document);
-                System.out.println("ID: " + id + ", Document: " + document);
+                //System.out.println("ID: " + id + ", Document: " + document);
             }
         } catch (SQLException e) {
 

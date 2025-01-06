@@ -11,12 +11,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import java.time.OffsetDateTime;
-import org.hibernate.annotations.Type;
+//import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import tech.intellibio.augi4.user.User;
-import io.hypersistence.utils.hibernate.type.array.DoubleArrayType;
+//import io.hypersistence.utils.hibernate.type.array.DoubleArrayType;
 
 
 @Entity
@@ -40,7 +40,7 @@ public class Document {
     @Column(nullable = false, columnDefinition = "text")
     private String content;
 
-  @Type(DoubleArrayType.class)
+//  @Type(DoubleArrayType.class)
 @Column(name = "embedding", columnDefinition = "vector(384)")
 private double[] embedding;
 
