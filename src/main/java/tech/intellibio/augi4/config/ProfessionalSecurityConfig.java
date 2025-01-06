@@ -49,7 +49,9 @@ public class ProfessionalSecurityConfig {
             @Value("${professional.rememberMeKey}") final String rememberMeKey,
             final ProfessionalUserDetailsService professionalUserDetailsService) throws Exception {
        return http.securityMatcher("/feedbacks/**", "/professional/**")
-       .cors(withDefaults())
+                       .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+      
                 .csrf(withDefaults())
         .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/professional/register",  "/professional/terms", "/professional/login", "/logout")
@@ -82,10 +84,11 @@ public class ProfessionalSecurityConfig {
     }
     
     
+    
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://beta.intellibio.tech"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
