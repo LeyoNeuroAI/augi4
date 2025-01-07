@@ -98,8 +98,7 @@ public class projectControllers {
     
     // Method to check if the user has access to the project
     private boolean hasAccessToProject(User user, Project project) {
-        // Implement your access logic here
-        // For example, check if the user is associated with the project
+       
         return project.getUser().equals(user); // Example logic
     }
     
@@ -241,7 +240,7 @@ public class projectControllers {
         Project project = projectRepository.findById(id).
                 orElseThrow(() -> new RuntimeException("Project not found"));
         
-        if (!hasAccessToProject(user, project)) {
+        if (hasAccessToProject(user, project)) {
             // Throw an exception to trigger the error handling mechanism
             throw new AccessDeniedException("Access denied to project with ID: " + id);
         }
@@ -267,7 +266,7 @@ public class projectControllers {
                         User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
 
         
-        if (!hasAccessToProject(user, project)) {
+        if (hasAccessToProject(user, project)) {
             // Throw an exception to trigger the error handling mechanism
             throw new AccessDeniedException("Access denied to project with ID: " + id);
         }
@@ -299,7 +298,7 @@ public class projectControllers {
                         User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
 
         
-        if (!hasAccessToProject(user, project)) {
+        if (hasAccessToProject(user, project)) {
             // Throw an exception to trigger the error handling mechanism
             throw new AccessDeniedException("Access denied to project with ID: " + id);
         }
@@ -358,7 +357,7 @@ public class projectControllers {
                 User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
 
         
-         if (!hasAccessToProject(user, project)) {
+         if (hasAccessToProject(user, project)) {
             // Throw an exception to trigger the error handling mechanism
             throw new AccessDeniedException("Access denied to project with ID: " + id);
         }
@@ -375,6 +374,8 @@ public class projectControllers {
         //System.out.println(projectDTO.getProgam());
         Program program = programRepository.findById(projectDTO.getProgam()).
                 orElseThrow(() -> new RuntimeException("Program not found"));
+        
+       
 
         Project project = new Project();
 
@@ -393,16 +394,20 @@ public class projectControllers {
         Project savedProject = new Project();
 
         try {
-            // Save the project first
-            savedProject = projectRepository.save(project);
-
+           
+             savedProject = projectRepository.save(project);
             // Create files based on the number of chapters
             Integer noOfChapters = program.getNoOfChapters();
             List<ProjectFile> files = new ArrayList<>();
             if (noOfChapters != null && noOfChapters > 0) {
                 for (int i = 0; i <= noOfChapters; i++) {
                     ProjectFile file = new ProjectFile();
-                    //System.out.println(i);
+                    
+                     System.out.println("i :"+ i);
+                    System.out.println(program.getId());
+                    
+                    
+                    
                     Prompt prompt = promptRepository.findByChapterNoAndProgram(i, program).
                             orElseThrow(() -> new RuntimeException("Prompt not found"));
 
@@ -415,6 +420,8 @@ public class projectControllers {
                     files.add(file);
 
                 }
+                
+               
 
                 List<ProjectFile> savedFiles = projectFilesRepository.saveAll(files);
 

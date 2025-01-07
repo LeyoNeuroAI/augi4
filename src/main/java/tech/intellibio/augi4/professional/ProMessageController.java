@@ -169,7 +169,6 @@ public class ProMessageController {
         
        String newMessage =  documentService.rag(message, sessionId);
 
-        System.out.println(newMessage);
 
         return claudeService.streamResponse(sessionId, newMessage, user, prompts);
     }
