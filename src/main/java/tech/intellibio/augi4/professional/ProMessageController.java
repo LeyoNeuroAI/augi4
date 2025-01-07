@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -149,23 +150,7 @@ public class ProMessageController {
         return "professional/dchat";
     }
     
-    
-    @PostMapping("/send")
-    @ResponseBody
-    public ResponseEntity<String> sendMessage(@RequestParam String message, @RequestParam String sessionId) {
-        
-        String sysPrompt = " Your an AI  RAG expert ";
-        
-        try {
-            String response = rag2Service.getResponse(
-               message, sysPrompt
-            );
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Error processing your request");
-        }
-    }
+  
     
 
 
@@ -269,7 +254,7 @@ public class ProMessageController {
         return "professional/genius";
     }
 
-
+//History
 
     @GetMapping("/genius/{name}/{id}")
     public String getChatWindow(@PathVariable("id") String chatSessionId, @PathVariable("name") String name, Model model,
@@ -288,18 +273,13 @@ public class ProMessageController {
                     newChatMessage.setMessage(new ArrayList<>());
                     return newChatMessage;
                 });
+        
+        
+       
 
-        List<ChatHistoryDTO> chatHistoryDTOL = new ArrayList<>();
+        List<ChatHistoryDTO> chatHistoryDTOL = chatHistDTO(chatMessage.getMessage());
 
-//        for (Map<String, String> message : chatMessage.getMessage()) {
-//            ObjectMapper mapper = new ObjectMapper();
-//            try {
-//                ChatHistoryDTO chatHistoryDTO = mapper.readValue(message, ChatHistoryDTO.class);
-//                chatHistoryDTOL.add(chatHistoryDTO);
-//            } catch (JsonProcessingException e) {
-//                // Handle the exception
-//            }
-//        }
+       
 
         User user = userRepository.findByEmailIgnoreCase(userDetails.getUsername());
         // Retrieve the user's chat sessions
@@ -321,5 +301,41 @@ public class ProMessageController {
         model.addAttribute("chathistory", chatHistoryDTOL);
         return "professional/geniusHistory";
     }
+    
+    
+      public List<ChatHistoryDTO> chatHistDTO(List<Map<String, String>> messages) {
+             
+              List<ChatHistoryDTO> chatHistoryDTOL = new ArrayList<>();
+              
+              
+              
+        if (messages.isEmpty()) {
+            
+            ChatHistoryDTO chatHistoryDTO =  new  ChatHistoryDTO ();
+            
+            chatHistoryDTO.setRole("assistant");
+            chatHistoryDTO.setContent("No History");
+            chatHistoryDTOL.add(chatHistoryDTO);
+            
+            return chatHistoryDTOL ;
+        }
+        
+       
+        for (int i = 0; i < messages.size(); i++) {
+            Map<String, String> message = messages.get(i);
+           ChatHistoryDTO chatHistoryDTO =  new  ChatHistoryDTO ();
+           
+            chatHistoryDTO.setRole(message.get("role"));
+//            System.out.println(chatHistoryDTO.getRole());
+            chatHistoryDTO.setContent(message.get("content"));
+//            System.out.println(chatHistoryDTO.getContent());
+           chatHistoryDTOL.add(chatHistoryDTO);
+           
+        }
+        
+        return chatHistoryDTOL ;
+        
+      }
+  
 
 }

@@ -41,13 +41,15 @@ public class AdminSecurityConfig {
         return http.cors(withDefaults())
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/actuator/**"))
                 .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/error", "/admin/login", "/admin/register",  "/avatars/**", "/css/**", "/dist/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        
+                    .requestMatchers("/error",  "/admin/login", "/admin/register",  "/avatars/**", "/css/**", "/dist/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                     .anyRequest().hasAuthority(UserRoles.ADMIN))
                 .authenticationManager(adminAuthenticationManager)
                 .formLogin(form -> form
                     .loginPage("/admin/login")
                     .usernameParameter("email")
                     .failureUrl("/admin/login?loginError=true")
+                        .defaultSuccessUrl("/index", true)
                    )
                 .rememberMe(rememberMe -> rememberMe
                     .tokenValiditySeconds(((int)Duration.ofDays(180).getSeconds()))
