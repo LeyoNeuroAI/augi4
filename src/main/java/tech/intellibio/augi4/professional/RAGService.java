@@ -132,9 +132,7 @@ public class RAGService {
 
 // Get the Embedding object from the response
                 Embedding embedding = response.content();
-                double[] pgvectorEmbedding = embedding.vectorAsList().stream()
-                        .mapToDouble(Float::doubleValue)
-                        .toArray();
+                List<Float> pgvectorEmbedding = embedding.vectorAsList();
 
                 Document document = new Document();
                 document.setEmbedding(pgvectorEmbedding);
@@ -187,18 +185,16 @@ public class RAGService {
 
 // Get the Embedding object from the response
         Embedding embedding1 = promptResponse.content();
-        double[] vec = embedding1.vectorAsList().stream()
-                .mapToDouble(Float::doubleValue)
-                .toArray();
+        List<Float> vec = embedding1.vectorAsList();
 
-        String query = "SELECT * FROM public.documents WHERE session_id =? ORDER BY embedding <-> ?::vector limit 2";
+        String query = "SELECT * FROM public.document WHERE session_id =? ORDER BY embedding <-> ?::vector limit 2";
 
-// Convert ArrayList to a PostgreSQL-compatible vector string
+/// Convert ArrayList to a PostgreSQL-compatible vector string
         StringBuilder vectorString = new StringBuilder();
         vectorString.append('[');
-        for (int i = 0; i < vec.length; i++) { // Use vec.length instead of vec.size()
-            vectorString.append(vec[i]); // Use vec[i] instead of vec.get(i)
-            if (i < vec.length - 1) { // Use vec.length instead of vec.size()
+        for (int i = 0; i < vec.size(); i++) {
+            vectorString.append(vec.get(i));
+            if (i < vec.size() - 1) {
                 vectorString.append(',');
             }
         }
@@ -206,6 +202,7 @@ public class RAGService {
 ////        
 //
         //System.out.println(vectorString.toString());
+        //{"type":"invalid_request_error","message":"prompt is too long: 206719 tokens > 200000 maximum"}}
 
         List<String> documentsContent = new ArrayList();
 
@@ -240,6 +237,7 @@ public class RAGService {
             // Handle the case where all documents were empty
             message = prompt;
         }
+        
 
         return message;
 

@@ -13,7 +13,7 @@ public class DocumentDTO {
     private String content;
 
     @NotNull
-    private double[] embedding;
+    private List<Float> embedding;
 
     @NotNull
     private String filename;
@@ -39,13 +39,15 @@ public class DocumentDTO {
         this.content = content;
     }
 
-    public double[] getEmbedding() {
+    public List<Float> getEmbedding() {
         return embedding;
     }
 
-    public void setEmbedding(double[] embedding) {
+    public void setEmbedding(List<Float> embedding) {
         this.embedding = embedding;
     }
+
+    
 
    
 

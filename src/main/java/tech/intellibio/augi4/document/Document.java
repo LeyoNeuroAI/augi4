@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import java.time.OffsetDateTime;
+import java.util.List;
 //import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -42,7 +43,7 @@ public class Document {
 
 //  @Type(DoubleArrayType.class)
 @Column(name = "embedding", columnDefinition = "vector(384)")
-private double[] embedding;
+List<Float> embedding;
 
     @Column(nullable = false, columnDefinition = "text")
     private String filename;
@@ -78,13 +79,15 @@ private double[] embedding;
         this.content = content;
     }
 
-    public double[] getEmbedding() {
+    public List<Float> getEmbedding() {
         return embedding;
     }
 
-    public void setEmbedding(double[] embedding) {
+    public void setEmbedding(List<Float> embedding) {
         this.embedding = embedding;
     }
+
+    
 
    
 
