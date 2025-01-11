@@ -65,10 +65,8 @@
                             <div class="card-header d-none d-md-block">
                                 <div class="input-icon">
 
-                                    <form th:action="@{/professional/genius/GrantGenius}" method="post" class="dropdown-item">
-
-
-                                        <button class="btn "  type="submit" id="new-chat-btn">
+                                  <a th:href="@{/professional/genius(name=${name})}" class="dropdown-item">
+                                        <button class="btn" id="new-chat-btn">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
@@ -77,7 +75,7 @@
                                             </svg>
                                             New Chat
                                         </button>
-                                    </form>
+                                    </a>
 
                                 </div>
 
@@ -86,9 +84,9 @@
                                 <div class="nav flex-column nav-pills" role="tablist">
                                     
                                     
-                 
 
-                                    <a th:each="chatSession : ${chatSessions}" th:href="@{/professional/genius/GrantGenius/{id}(id=${chatSession.sessionId})}" class="nav-link text-start mw-100 p-3 custom-link" th:id="'chat-' + ${chatSession.id} + '-tab'" data-bs-toggle="pill" role="tab" aria-selected="true">
+
+                                    <a th:each="chatSession : ${chatSessions}" th:href="@{/professional/genius/history(name=${name}, chatSessionId=${chatSession.sessionId})}" class="nav-link text-start mw-100 p-3 custom-link" th:id="'chat-' + ${chatSession.id} + '-tab'" data-bs-toggle="pill" role="tab" aria-selected="true">
                                         <div class="row align-items-center flex-fill">
                                             <div class="col text-body">
                                                 <div th:text="${chatSession.id}"></div>
@@ -114,7 +112,7 @@
                                                     <div class="chat-bubble chat-bubble-me">
                                                         <div class="chat-bubble-title">
                                                             <div class="row">
-                                                                <div class="col chat-bubble-author">Grant Genius</div>
+                                                                                        <div class="col chat-bubble-author" th:text="${name}"/>
 
                                                             </div>
                                                         </div>

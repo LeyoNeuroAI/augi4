@@ -19,6 +19,8 @@ public interface ChatSessionRepository extends JpaRepository<ChatSession, Intege
     
     List <ChatSession> findByUser(User user);
     
+     List <ChatSession> findByProductAndUser(Product product, User user);
+    
   ChatSession findBySessionId (String sessionId);
                 
 

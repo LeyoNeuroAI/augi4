@@ -1,6 +1,7 @@
 package tech.intellibio.augi4.prompt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,24 +77,25 @@ public class PromptController {
         return "prompt/add";
     }
 
+ 
     @PostMapping("/add")
     public String add(@ModelAttribute("prompt") @Valid final PromptDTO promptDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
-//        if (bindingResult.hasErrors()) {
-//            return "prompt/add";
-//        }
+        if (bindingResult.hasErrors()) {
+            return "prompt/add";
+        }
 
         Prompt prompt = new Prompt();
         prompt.setChapterNo(promptDTO.getChapterNo());
         prompt.setInvisiblePrompt(promptDTO.getInvisiblePrompt());
         prompt.setSystemPrompt(promptDTO.getSystemPrompt());
         prompt.setVersion(promptDTO.getVersion());
-        List<String> visiblePrompt = new ArrayList<>();
-        visiblePrompt.add("Item 1");
-        visiblePrompt.add("Item 2");
-        visiblePrompt.add("Item 3");
-
-        prompt.setVisiblePrompt(visiblePrompt);
+//        List<String> visiblePrompt = new ArrayList<>();
+//        visiblePrompt.add("Item 1");
+//        visiblePrompt.add("Item 2");
+//        visiblePrompt.add("Item 3");
+//
+        prompt.setVisiblePrompt(promptDTO.getVisiblePrompt());
         final Program program = promptDTO.getProgram() == null ? null : programRepository.findById(promptDTO.getProgram())
                 .orElseThrow(() -> new NotFoundException("program not found"));
         prompt.setProgram(program);

@@ -2,8 +2,8 @@ package tech.intellibio.augi4.prompt;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
-
 
 public class PromptDTO {
 
@@ -22,7 +22,7 @@ public class PromptDTO {
     private Double version;
 
     @NotNull
-    private List<@Size(max = 255) String> visiblePrompt;
+    private List<String> visiblePrompt;
 
     private Long program;
 
@@ -80,6 +80,14 @@ public class PromptDTO {
 
     public void setProgram(final Long program) {
         this.program = program;
+    }
+
+    public void addVisiblePrompt(String prompt) {
+        this.visiblePrompt.add(prompt);
+    }
+
+    public void removeVisiblePrompt(int index) {
+        this.visiblePrompt.remove(index);
     }
 
 }

@@ -115,11 +115,14 @@
                                     <div class="dropdown-menu">
                                         <div class="dropdown-menu-columns">
                                             <div class="dropdown-menu-column">
-                                                <a class="dropdown-item"  th:href="@{/professional/genius/GrantGenius}">
+                                                
+                                                 <a th:href="@{/professional/genius(name=GrantGenius)}" class="dropdown-item">
+                                              
                                                     [[#{professional.geniuses}]]
                                                 </a>
-                                                <a class="dropdown-item" href="./cookie-banner.html">
-                                                    Another Genius
+                                                <a th:href="@{/professional/genius(name=DevGenius)}" class="dropdown-item">
+                                              
+                                                 Dev Genius
                                                 </a>
 
                                             </div>

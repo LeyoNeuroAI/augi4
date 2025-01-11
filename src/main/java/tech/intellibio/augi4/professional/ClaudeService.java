@@ -71,7 +71,7 @@ public class ClaudeService {
 
 //   private String systemPrompt = "You are an AI biotech expert";
     // @Autowired
-    private StringBuilder assistantContent;
+    
     //private final String systemPrompt;
 
     public ClaudeService(ChatSessionRepository sessionRepository, ChatMessageRepository messageRepository,
@@ -84,7 +84,7 @@ public class ClaudeService {
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(10))
                 .build();
-        this.assistantContent = new StringBuilder();
+        
 
 //        this.systemPrompt = entity.getSystemPrompt();
         this.chatSessionService = chatSessionService;
@@ -139,6 +139,8 @@ chatMessage.setMessage(messages);
 
     public SseEmitter callClaudeAPI(ChatMessage chatMessage, Prompt prompts) {
         SseEmitter emitter = new SseEmitter(-1L); // No timeout
+        
+       StringBuilder assistantContent = new StringBuilder();
 
         String systemPrompt = prompts.getSystemPrompt();
 
@@ -160,7 +162,7 @@ chatMessage.setMessage(messages);
                 Map<String, Object> requestBody = Map.of(
                         "model", "claude-3-sonnet-20240229",
                         "max_tokens", 2000,
-                        "temperature", 0.7,
+                        "temperature", 0.2,
                         "stream", true, // Important for streaming
                         "system", systemPrompt,
                         "messages", chatMessage.getMessage()
@@ -183,13 +185,13 @@ chatMessage.setMessage(messages);
 
                         while ((line = reader.readLine()) != null) {
                             if (line.startsWith("data: ")) {
-                                processStreamData(line, emitter);
+                                processStreamData(line, emitter, assistantContent);
                             }
                         }
 
                         emitter.complete();
                         
-
+                        //System.out.println(assistantContent.toString());
                         Map<String, String> chatData2 = new HashMap<>();
                         chatData2.put("role", "assistant");
                         chatData2.put("content", assistantContent.toString());
@@ -299,7 +301,7 @@ chatMessage.setMessage(messages);
 //        return chatHistory;
 //    }
 
-    private void processStreamData(String line, SseEmitter emitter) {
+    private void processStreamData(String line, SseEmitter emitter, StringBuilder assistantContent) {
         try {
             String jsonData = line.substring(6);
 

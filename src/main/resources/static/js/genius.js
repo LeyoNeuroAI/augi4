@@ -2,12 +2,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const chatContainer = document.getElementById('chat-container');
 //const chatContainer = document.querySelector(".chat-bubbles");
     const messageInput = document.getElementById("message-input");
+    
+  const url = window.location.href;
 
+// Call the function to get the "DevGenius" value
+const geniusName = new URL(url).searchParams.get('name');
     // Get the button element
 
     const sessionInput = document.getElementById("sessionInput");
     let currentAssistantMessage = null;
-    const urlParams = new URLSearchParams(window.location.search);
+//    const urlParams = new URLSearchParams(window.location.search);
 
     const submitButton = document.getElementById("submit-btn"); // Get the button element
 
@@ -147,7 +151,7 @@ document.querySelectorAll('.custom-link').forEach(function(link) {
         currentAssistantMessage = addChatMessageGG('');
 
         // Start streaming response
-        const eventSource = new EventSource(`/professional/stream?sessionId=${sessionId}&message=${encodeURIComponent(message)}`);
+        const eventSource = new EventSource(`/professional/stream?sessionId=${sessionId}&name=${geniusName}&message=${encodeURIComponent(message)}`);
 
         eventSource.onmessage = function (event) {
             currentAssistantMessage.textContent += event.data + ' ';

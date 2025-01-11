@@ -1,40 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const visiblePromptInput = document.getElementById('visiblePromptInput');
-    const addVisiblePromptButton = document.getElementById('addVisiblePrompt');
-    const visiblePromptList = document.getElementById('visiblePromptList');
-    const form = document.getElementById('myForm');
 
-    addVisiblePromptButton.addEventListener('click', () => {
-        const itemValue = visiblePromptInput.value.trim();
-        if (itemValue && itemValue.length <= 255) {
-            const listItem = document.createElement('li');
-            listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-            listItem.textContent = itemValue;
-            const removeButton = document.createElement('button');
-            removeButton.classList.add('btn', 'btn-danger', 'btn-sm');
-            removeButton.textContent = 'Remove';
-            removeButton.addEventListener('click', () => {
-                listItem.remove();
-            });
-            listItem.appendChild(removeButton);
-            visiblePromptList.appendChild(listItem);
-            visiblePromptInput.value = '';
-        } else {
-            alert('Visible prompt item must be 255 characters or less.');
-        }
+
+    document.getElementById('addbtn').addEventListener('click', function () {
+        var newitem = document.getElementById('add').value;
+        var uniqid = Math.round(new Date().getTime() + (Math.random() * 100));
+        var li = document.createElement('li');
+        li.id = uniqid; 
+        li.className = 'list-group-item';
+        li.innerHTML = '<input type="button" data-id="'+uniqid+'" class="listelement" value="X" /> ' + newitem;
+        var hiddenInput = document.createElement('input'); 
+        hiddenInput.type = 'hidden'; 
+        hiddenInput.name = 'visiblePrompt'; 
+        hiddenInput.setAttribute('th:value', newitem); 
+        hiddenInput.setAttribute('th:field', "*{visiblePrompt}");
+        hiddenInput.value = newitem; li.appendChild(hiddenInput);
+        document.getElementById('list').appendChild(li);
+        document.getElementById('add').value = '';
     });
-
-    form.addEventListener('submit', (event) => {
-        console.log("done");
-        event.preventDefault();
-        const visiblePromptItems = Array.from(visiblePromptList.children).map(li => li.firstChild.textContent);
-        console.log(visiblePromptItems);
-        const visiblePromptField = document.createElement('input');
-        visiblePromptField.type = 'hidden';
-        visiblePromptField.name = 'visiblePrompt';
-        visiblePromptField.value = visiblePromptItems;
-        form.appendChild(visiblePromptField);
-        console.log(form);
-        form.submit();
+    document.getElementById('list').addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('listelement')) {
+            var elemid = e.target.getAttribute('data-id');
+            var elem = document.getElementById(elemid);
+            elem.parentNode.removeChild(elem);
+        }
     });
 });
