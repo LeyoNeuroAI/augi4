@@ -68,7 +68,7 @@ document.querySelectorAll('.custom-link').forEach(function(link) {
 
 
 
-    function addChatMessageGG(message = "Hello How can I assist you", author = "Grant Genius", prompts = []) {
+    function addChatMessageGG(message = "Hello How can I assist you", author = geniusName, prompts = []) {
         const chatItem = document.createElement("div");
         chatItem.classList.add("chat-item");
 
