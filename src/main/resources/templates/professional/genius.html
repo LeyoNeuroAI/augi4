@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{professional/layout}">
     <head>
-        <title>[[#{professional.genius.headline}]]</title>
+        <title th:text="${name}"></title>
 
 
         <script th:src="@{/js/genius.js}" defer></script>
