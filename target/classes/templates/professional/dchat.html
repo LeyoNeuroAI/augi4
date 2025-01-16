@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{professional/layout}">
+    <head>
+        <title>[[#{professional.genius.headline}]]</title>
+
+
+        <script th:src="@{/js/dchat.js}" defer></script>
+
+        <style>
+
+            body {
+                font-feature-settings: "cv03", "cv04", "cv11";
+            }
+
+            .chat-item {
+                margin-bottom: 1rem; /* Add margin to separate chat items */
+            }
+            .chat-bubble-body {
+                overflow: hidden; /* Clear floats */
+            }
+
+            .chat-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px; /* Space between buttons */
+                justify-content: flex-start;
+                margin-top: 10px; /* Add some space between text and buttons */
+            }
+
+            .chat-buttons .btn {
+                flex: 1 0 calc(50% - 10px); /* 50% width minus the gap */
+                text-align: center;
+            }
+        </style>
+    </head>
+
+
+    <body>
+        <div layout:fragment="content">
+
+
+
+
+            <!-- Chat messages container -->
+
+
+
+            <div class="container-xl">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-12 col-lg-5 col-xl-3 border-end">
+                            <div class="card-header d-none d-md-block">
+                                <div class="input-icon">
+                                    <span class="input-icon-addon"> <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                                    </span>
+                                    <input type="text" value="" class="form-control" placeholder="Search…" aria-label="Search" />
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="card-header d-none d-md-block">
+                                <div class="input-icon">
+
+                                    <form th:action="@{/professional/document}" method="get" class="dropdown-item">
+
+
+                                        <button class="btn "  type="submit" id="new-chat-btn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                            <path d="M9 12h6" />
+                                            <path d="M12 9v6" />
+                                            </svg>
+                                            New Chat
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                            <div class="card-header d-none d-md-block">
+                                <div class="input-icon">
+
+                                    <form th:action="@{/professional/genius/DocumentSearch/{id}(id=${currentSessionId})}" method="get" class="dropdown-item">
+
+
+                                        <button class="btn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-history" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <circle cx="12" cy="12" r="9" />
+                                            <path d="M12 7v5l3 3" />
+                                            </svg>
+                                            History
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-lg-7 col-xl-9 d-flex flex-column">
+                            <div class="card-body scrollable" style="height: 35rem">
+                                <div class="chat">
+                                    <div class="chat-bubbles" id="chat-container">
+
+
+                                        <div class="chat-item">
+                                            <div class="row align-items-end">
+                                                <div class="col col-lg-12">
+                                                    <div class="chat-bubble chat-bubble-me">
+                                                        <div class="chat-bubble-title">
+                                                            <div class="row">
+                                                                <div class="col chat-bubble-author">Document Genius</div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="chat-bubble-body">
+                                                            <p id="chat-message" style="white-space: pre-wrap;">Hello, How can I assist you? </p>
+
+
+
+                                                            <div class="chat-buttons" th:if="${prompts != null and !#lists.isEmpty(prompts)}">
+
+                                                                <button  th:each="prompt : ${prompts}" class="btn prompt-btn" th:text="${prompt}"></button>
+
+                                                            </div>
+
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="input-group input-group-flat">
+                                    <input type="text" class="form-control" id="message-input"  autocomplete="off" placeholder="Type message" />
+                                    <input type="hidden"  class="form-control" id="sessionInput" name="sessionInput" th:value="${currentSessionId}"/>
+
+                                  
+                                    <button id="submit-btn" class="btn"  type="button">Submit</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </body>
+</html>
+
+

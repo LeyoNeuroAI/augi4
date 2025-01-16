@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{professional/layout}">
+
+    <div th:replace="~{fragments/forms::globalErrors('feedback')}" />
+
+    <div layout:fragment="content">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+
+                    <form   class="card shadow-sm" th:action="${requestUri}" method="post">
+
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="card-title mb-0">Feedback Form</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Contact Options Section -->
+                            <div class="form-check mt-3">
+
+
+                                <div th:replace="~{fragments/forms::inputRow(object='feedback', field='product', type='select')}" />
+                            </div>
+                              <input type="hidden" th:field="${feedback.user}">
+                            <div class="form-check mt-3">
+                            <div th:replace="~{fragments/forms::inputRow(object='feedback', field='topics', required=true)}" />
+                            </div>
+                            <div class="form-check mt-3">
+                                <div th:replace="~{fragments/forms::inputRow(object='feedback', field='summary', required=true, type='textarea')}" />
+
+                            </div>
+                        </div>
+                        <!-- Feedback Section -->
+
+                        <div class="card-footer text-end">
+                            <input type="submit" th:value="#{feedback.add.headline}" class="btn btn-primary mt-4" />
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>

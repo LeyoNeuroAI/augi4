@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{loginLayout}">
+    <head>
+        <title>[[#{registration.register.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <h1 class="mb-4">[[#{registration.register.headline}]]</h1>
+            <div th:replace="~{fragments/forms::globalErrors('registrationRequest')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='email', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='isActive', type='checkbox')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='name', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='organisation', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='password', required=true, type='password')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='stripeCustomerId')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='stripeSubscriptionId')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='subscriptionStatus')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='refer')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='terms', type='checkbox')}" />
+                <input type="submit" th:value="#{registration.register.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

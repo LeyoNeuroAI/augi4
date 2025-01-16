@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{professional/layout}">
+
+
+
+
+    <head>
+        <title>[[#{professional.grants.headline}]]</title>
+        <script th:src="@{/js/projectEdit.js}" defer></script>
+
+        <script th:src="@{/dist/libs/tinymce/tinymce.min.js?1692870487}" defer></script>
+
+
+
+    </head>
+    <body>
+
+
+        <div layout:fragment="content">
+            <div class="container-xl">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">Biotech Grants Genie</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <label class="form-check form-check-inline">
+                            <span class="form-check-label">Project Name: </span>
+                            <span id="project-name-display" th:text="${project.name}" class="navbar-text me-3"></span>
+                            <input type="hidden"  class="form-control" id="projectId" name="projectId" th:value="${project.Id}"/>
+
+                        </label>
+                        <div>
+                            <label class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox"  id="chainPreviousChapterCheckbox">
+                                <span class="form-check-label">Chain Previous Chapter</span>
+                            </label>
+
+                        </div>
+
+
+                        <a th:href="@{${requestUri} + '/export'}" 
+                           class="btn btn-primary">Download</a>
+
+                    </div>
+                </nav>
+
+                <div class="card">
+
+                    <div class="row g-0">
+                        <div class="col-12 col-lg-4 col-xl-2 border-end">
+                            <div class="card-header d-none d-md-block">
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                                    </span>
+                                    <input type="text" value="" class="form-control" placeholder="Search…" aria-label="Search" />
+                                </div>
+                            </div>
+                            <div class="card-body p-0 scrollable" style="max-height: 35rem">
+                                <div class="nav flex-column nav-pills" role="tablist" id="fileList">
+
+                                    <a th:each="file : ${projectFiles}" th:href="@{/professional/genie/grant/edit/file/{projectId}/{fileId}(projectId=${id}, fileId=${file.id})}" class="nav-link text-start mw-100 p-3 custom-link" th:id="'chat-' + ${file.id} + '-tab'" data-bs-toggle="pill" role="tab" aria-selected="true">
+                                        <div class="row align-items-center flex-fill">
+                                            <div class="col text-body">
+                                                <div th:text="${file.name}"></div>
+                                                <div class="text-secondary text-truncate w-100" th:text="${file.content}"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-4 col-xl-5 d-flex flex-column border-end">
+                            <div class="card-body scrollable" style="height: 35rem">
+
+
+                                <div class="chat" th:if="${projectFile != null}">
+
+                                    <!-- Add chat items here similar to the previous column -->
+
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Chapter name</label>
+                                        <input type="text" class="form-control" placeholder="Name" id="chapter-name" th:value="${projectFile.name}" readonly>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Chapter No</label>
+                                        <input type="hidden"  class="form-control" id="fileid" name="fileid" th:value="${projectFile.Id}"/>
+
+                                        <input type="text" class="form-control" placeholder="Name" id="chapter-no" th:value="${projectFile.chapterNo}" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <form th:action="${requestUri}" method="post">
+                                            <textarea id="tinymce-mytextarea" class="form-control" name="content" style="height: 300px;" th:text="${projectFile.content}"></textarea>
+
+                                            <button id="editor-save-button" class="btn"  type="submit">Save</button>
+                                        </form>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- chat  -->
+                        <div class="col-12 col-lg-4 col-xl-5 d-flex flex-column border-end">
+                            <div class="card-body scrollable" style="height: 35rem">
+                                <div class="chat">
+                                    <div class="chat-bubbles" id="chat-container">
+
+                                        <div class="chat-item">
+                                            <div class="row align-items-end">
+                                                <div class="col col-lg-12">
+                                                    <div class="chat-bubble chat-bubble-me">
+                                                        <div class="chat-bubble-title">
+                                                            <div class="row">
+                                                                <div class="col chat-bubble-author">Grant Genius</div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="chat-bubble-body">
+                                                            <p id="chat-message" style="white-space: pre-wrap;">Hello, How can I assist you? </p>
+
+
+
+                                                            <div class="chat-buttons" th:if="${prompts != null and !#lists.isEmpty(prompts)}">
+
+                                                                <button  th:each="prompt : ${prompts}" class="btn prompt-btn" th:text="${prompt}"></button>
+
+                                                            </div>
+
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="input-group input-group-flat">
+                                    <input type="text" class="form-control" autocomplete="off" id="message-input" placeholder="Type message" />
+                                    <input type="hidden"  class="form-control" id="sessionInput" name="sessionInput" th:value="${currentSessionId}"/>
+
+                                    <span class="input-group-text">
+                                        <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="Clear search" title="Clear search">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 10l.01 0" /><path d="M15 10l.01 0" /><path d="M9.5 15a3.5 3.5 0 0 0 5 0" /></svg>
+                                        </a>
+                                        <a href="#" class="link-secondary ms-2" data-bs-toggle="tooltip" aria-label="Add notification" title="Add notification">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" /></svg>
+                                        </a>
+
+                                    </span>
+                                    <button id="submit-btn" class="btn"  type="button">Submit</button>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+    </body>
+
+
+
+
+
+
+
+
+</html>

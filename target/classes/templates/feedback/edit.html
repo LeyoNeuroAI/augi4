@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{feedback.edit.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{feedback.edit.headline}]]</h1>
+                <div>
+                    <a th:href="@{/feedbacks}" class="btn btn-secondary">[[#{feedback.edit.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('feedback')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='feedback', field='id', disabled=true, type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='feedback', field='summary', required=true, type='textarea')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='feedback', field='topics', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='feedback', field='user', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='feedback', field='product', type='select')}" />
+                <input type="submit" th:value="#{feedback.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

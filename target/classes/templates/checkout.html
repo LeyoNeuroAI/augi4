@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment Details</title>
+</head>
+<body>
+    <div>
+        <h2>Payment Details</h2>
+        <p>Amount: $<span th:text="${#numbers.formatDecimal(payment.amountInPennies / 100.0, 1, 2)}"></span></p>
+        <p>Currency: <span th:text="${payment.currency}"></span></p>
+        <p>Reference: <span th:text="${payment.reference}"></span></p>
+        <p>Billing Country: <span th:text="${payment.billingCountry}"></span></p>
+        <p>Customer Name: <span th:text="${payment.customerName}"></span></p>
+        <p>Customer Email: <span th:text="${payment.customerEmail}"></span></p>
+        <p>Processing Channel ID: <span th:text="${payment.processingChannelId}"></span></p>
+    </div>
+</body>
+</html>

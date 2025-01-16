@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+        <title>Cycle</title>
+        <!-- CSS files -->
+        <link href="./dist/css/tabler.min.css?1692870487" rel="stylesheet"/>
+        <link href="./dist/css/tabler-flags.min.css?1692870487" rel="stylesheet"/>
+        <link href="./dist/css/tabler-payments.min.css?1692870487" rel="stylesheet"/>
+        <link href="./dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet"/>
+        <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet"/>
+        <style>
+            @import url('https://rsms.me/inter/inter.css');
+            :root {
+                --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+            }
+            body {
+                font-feature-settings: "cv03", "cv04", "cv11";
+            }
+            
+           
+
+            .chat-item {
+                margin-bottom: 1rem; /* Add margin to separate chat items */
+            }
+            .chat-bubble-body {
+                overflow: hidden; /* Clear floats */
+            }
+
+            .chat-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px; /* Space between buttons */
+                justify-content: flex-start;
+                margin-top: 10px; /* Add some space between text and buttons */
+            }
+
+            .chat-buttons .btn {
+                flex: 1 0 calc(50% - 10px); /* 50% width minus the gap */
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body >
+        <script src="./dist/js/demo-theme.min.js?1692870487"></script>
+        <div class="page">
+
+            <div class="page-wrapper">
+
+
+
+                <!-- Page body -->
+                <div class="page-body">
+
+
+                    <div class="container-xl">
+                        <div class="card">
+                            <div class="row g-0">
+                                <div class="col-12 col-lg-5 col-xl-3 border-end">
+                                    
+
+
+                                    <div class="card-header d-none d-md-block">
+                                        <div class="input-icon">
+
+
+                                            <button class="btn" id="toggleButton">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                                <path d="M9 12h6" />
+                                                <path d="M12 9v6" />
+                                                </svg>
+                                                Contact me
+                                            </button>
+
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="col-4 border p-3" id="column2" style="display: none;">
+                                    <div class="mb-3">
+                                        <label class="form-label">Floating inputs</label>
+                                        <div class="form-floating mb-3">
+                                            <input type="email" class="form-control" id="floating-input" value="Mark@VC.com" autocomplete="off">
+                                            <label for="floating-input">Email address</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+
+                                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                                                <option selected>Open this select menu</option>
+                                                <option value="1">Billionaire Tech Visionary Ready to Invest</option>
+                                                <option value="2">HR fast Hire</option>
+                                                <option value="3">Vendor/Partner ready to provide me AI as as Service</option>
+                                                <option value="3">Other</option>
+
+                                            </select>
+                                            <label for="floatingSelect">Select</label>
+                                        </div>
+                                        <div class="form-floating">
+                                            <textarea class="form-control" id ="floatingSummary" rows="3"></textarea>
+                                            <label for="floatingSummary">Summary</label>
+                                        </div>
+                                    </div>
+                                     <button id="submit-btn" class="btn"  type="button">Submit</button>
+                                </div>
+                                <!--                                <div class="col-12 col-lg-7 col-xl-9 d-flex flex-column">-->
+
+                                <div class="col-8" id="column3">
+                                    
+                                    <div class="card-body scrollable" style="height: 35rem">
+                                        <div class="chat">
+                                            <div class="chat-bubbles" id="chat-container">
+
+
+                                                <div class="chat-item">
+                                                    <div class="row align-items-end">
+                                                        <div class="col col-lg-12">
+                                                            <div class="chat-bubble chat-bubble-me">
+                                                                <div class="chat-bubble-title">
+                                                                    <div class="row">
+                                                                        <div class="col chat-bubble-author" th:text="${name}"/>
+
+                                                                  
+                                                                </div>
+                                                                <div class="chat-bubble-body">
+                                                                    <p id="chat-message" style="white-space: pre-wrap;">Hello, How can I assist you? </p>
+
+
+
+                                                                    <div class="chat-buttons" th:if="${prompts != null and !#lists.isEmpty(prompts)}">
+
+                                                                        <button  th:each="prompt : ${prompts}" class="btn prompt-btn" th:text="${prompt}"></button>
+
+                                                                    </div>
+
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="input-group input-group-flat">
+                                            <input type="text" class="form-control" id="message-input"  autocomplete="off" placeholder="Type message" />
+                                            <input type="hidden"  class="form-control" id="sessionInput" name="sessionInput" th:value="${currentSessionId}"/>
+
+                                            <span class="input-group-text">
+                                                <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="Clear search" title="Clear search"> <!-- Download SVG icon from http://tabler-icons.io/i/mood-smile -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 10l.01 0" /><path d="M15 10l.01 0" /><path d="M9.5 15a3.5 3.5 0 0 0 5 0" /></svg>
+                                                </a>
+                                                <a href="#" class="link-secondary ms-2" data-bs-toggle="tooltip" aria-label="Add notification" title="Add notification"> <!-- Download SVG icon from http://tabler-icons.io/i/paperclip -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" /></svg>
+                                                </a>
+                                            </span>
+                                            <!--                                            <input type="submit" id="submit-btn" class="btn" value="Submit" />-->
+                                            <button id="submit-btn" class="btn"  type="button">Submit</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+   
+
+
+    <script>
+        const toggleButton = document.getElementById('toggleButton');
+        const column2 = document.getElementById('column2');
+        const column3 = document.getElementById('column3');
+
+        toggleButton.addEventListener('click', () => {
+            if (column2.style.display === 'none') {
+                column2.style.display = 'block';
+                column3.classList.remove('col-8');
+                column3.classList.add('col-4');
+            } else {
+                column2.style.display = 'none';
+                column3.classList.remove('col-4');
+                column3.classList.add('col-8');
+            }
+        });
+    </script>
+</body>
+</html>

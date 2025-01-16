@@ -1,0 +1,172 @@
+<html lang="en">
+  <head>
+        <title>Billing and Invoices</title>    
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabler@latest/dist/css/tabler.min.css"><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <!-- CSS files -->
+    <link href="./dist/css/tabler.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/tabler-flags.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/tabler-payments.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet"/>
+    <link href="./dist/css/demo.min.css?1692870487" rel="stylesheet"/>
+    <style>
+      @import url('https://rsms.me/inter/inter.css');
+      :root {
+      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+      	font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+<body>
+    
+     <header>       
+    <script src="./dist/js/demo-theme.min.js?1692870487"></script>
+    <script src="./static/js/navbar.js"></script>
+    
+    <!-- Navbar placeholders -->
+    <div id="navbar-user-placeholder"></div>
+    <div id="navigation-placeholder"></div>
+
+        <script>
+        // Load the Navbar-user
+        fetch('Navbar-user.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('navbar-user-placeholder').innerHTML = data);
+
+        // Load the navigation
+        fetch('navigation.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('navigation-placeholder').innerHTML = data);
+    </script>
+    </header>
+    
+    <div class="page-wrapper">
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- Page Header -->
+                <div class="container-md">
+                    <h2>Billing & Invoices</h2>
+                    <div class="mb-3">
+                        <label for="fileInput" class="form-label">Manage your billing details and view past invoices.</label>
+                    </div>
+                </div>
+
+                <!-- Billing Information Section -->
+                <div class="container-md">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Billing Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" placeholder="Your full name">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Address</label>
+                                    <textarea class="form-control" rows="3" placeholder="Your billing address"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" placeholder="Email for receiving invoices">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Payment Method</label>
+                                    <select class="form-select">
+                                        <option value="Select from Stripe">Invoicing</option>
+                                        <option value="Select from Stripe">Credit card</option>
+
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Change Payment method</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                      <!-- Invoice History Section -->
+                <div class="container-md mt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Invoice History</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-vcenter">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice ID</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Sample row -->
+                                        <tr>
+                                            <td>#INV-001234</td>
+                                            <td>2024-01-15</td>
+                                            <td>€500.00</td>
+                                            <td><span class="badge bg-success">Paid</span></td>
+                                            <td><a href="#" class="btn btn-secondary btn-sm">Download PDF</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#INV-001235</td>
+                                            <td>2024-02-15</td>
+                                            <td>€450.00</td>
+                                            <td><span class="badge bg-danger">Unpaid</span></td>
+                                            <td><a href="#" class="btn btn-secondary btn-sm">Download PDF</a></td>
+                                        </tr>
+                                        <!-- Add more rows as needed -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subscription Plan Section (Optional) -->
+                <div class="container-md mt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Subscription Plan</h3>
+                        </div>
+                        <div class="card-body">
+                           <p>Your current plan: <strong>Genius Premium</strong></p>
+                              <a href="products&pricing.html" class="btn btn-outline-primary">Upgrade Plan</a>
+                         </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabler Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/tabler@latest/dist/js/tabler.min.js"></script>
+   
+    <!-- Footer placeholder -->
+    <div id="footer-placeholder"></div>
+      </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="./dist/js/tabler.min.js?1692870487" defer></script>
+    <script src="./dist/js/demo.min.js?1692870487" defer></script>
+
+    <script>
+        // Load the footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer-placeholder').innerHTML = data);
+    </script>
+
+</body>
+</html>

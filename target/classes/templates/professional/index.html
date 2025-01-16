@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{professional/layout}">
+
+
+    <div layout:fragment="content">
+        
+        <div class="container-xl">
+            <div class="row row-deck row-cards">
+        <p>Welcome to your Workspace</p>    
+        <p>Please click on the Menu above and select your choices </p>    
+
+
+
+
+
+
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">[[#{project.list.headline}]]</h3>
+                </div>
+        
+               
+            <div th:if="${projects.empty}">[[#{project.list.empty}]]</div>
+            <div th:if="${!projects.empty}" class="table-responsive">
+
+                <table class="table card-table table-vcenter text-nowrap datatable">
+                    <thead>
+                        <tr>
+                            
+                            <th scope="col">[[#{project.id.label}]]</th>
+
+                            <th scope="col">[[#{project.name.label}]]</th>
+                            <th scope="col">[[#{project.summary.label}]]</th>
+                            <th scope="col">[[#{project.goal.label}]]</th>
+                            <th scope="col">[[#{project.organisationName.label}]]</th>
+
+                            <th scope="col">[[#{project.status.label}]]</th>
+                            <th scope="col">[[#{project.progam.label}]]</th>
+                            <th><!-- --></th>
+
+                         
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr th:each="project : ${projects}">
+                            <td>[[${project.id}]]</td>
+
+                            <td>[[${project.name}]]</td>
+                            <td>[[${project.summary}]]</td>
+                            <td>[[${project.goal}]]</td>
+                            <td>[[${project.organisationName}]]</td>
+
+
+                            <td>[[${project.status}]]</td>
+
+                            <td>[[${project.progam}]]</td>
+
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/professional/genie/grant/edit/{id}(id=${project.id})}" class="btn btn-sm btn-secondary">view</a>
+                                    
+                                </div>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+          
+           
+                <div th:replace="~{fragments/utils::pagination()}" />
+  </div>
+   
+</div>
+</div>
+</div>
+            </div>
+</div>
+            </div>
+        </div>
+            </div>
+        
+
+</html>

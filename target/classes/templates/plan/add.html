@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{plan.add.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{plan.add.headline}]]</h1>
+                <div>
+                    <a th:href="@{/plans}" class="btn btn-secondary">[[#{plan.add.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('plan')}" />
+            <form th:action="${requestUri}" method="post" novalidate="">
+                <div th:replace="~{fragments/forms::inputRow(object='plan', field='name', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='plan', field='document', type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='plan', field='storage', type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='plan', field='noOftoken', required=true, type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='plan', field='project', required=true, type='number')}" />
+                <input type="submit" th:value="#{plan.add.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

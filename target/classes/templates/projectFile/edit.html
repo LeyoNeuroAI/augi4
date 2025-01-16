@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{projectFile.edit.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{projectFile.edit.headline}]]</h1>
+                <div>
+                    <a th:href="@{/projectFiles}" class="btn btn-secondary">[[#{projectFile.edit.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('projectFile')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='projectFile', field='id', disabled=true, type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='projectFile', field='chapterNo', required=true, type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='projectFile', field='content', type='textarea')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='projectFile', field='name', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='projectFile', field='file', type='select')}" />
+                <input type="submit" th:value="#{projectFile.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{feedback.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{feedback.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/feedbacks/add}" class="btn btn-primary ms-2">[[#{feedback.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${!feedbacks.empty || filter != null}" class="row">
+                <div th:replace="~{fragments/utils::searchFilter(object='feedback')}" />
+                <div th:replace="~{fragments/utils::sorting(object='feedback', sortOptions=${ {'id,ASC', 'summary,ASC', 'topics,ASC'} }, columnClass='offset-lg-4')}" />
+            </div>
+            <div th:if="${feedbacks.empty}">[[#{feedback.list.empty}]]</div>
+            <div th:if="${!feedbacks.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{feedback.id.label}]]</th>
+                            <th scope="col">[[#{feedback.topics.label}]]</th>
+                            <th scope="col">[[#{feedback.user.label}]]</th>
+                            <th scope="col">[[#{feedback.product.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="feedback : ${feedbacks}">
+                            <td>[[${feedback.id}]]</td>
+                            <td>[[${feedback.topics}]]</td>
+                            <td>[[${feedback.user}]]</td>
+                            <td>[[${feedback.product}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/feedbacks/edit/{id}(id=${feedback.id})}" class="btn btn-sm btn-secondary">[[#{feedback.list.edit}]]</a>
+                                    <form th:action="@{/feedbacks/delete/{id}(id=${feedback.id})}"
+                                            th:data-confirm-message="#{delete.confirm}" method="post" class="js-submit-confirm d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{feedback.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

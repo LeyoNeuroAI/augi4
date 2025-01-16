@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{project.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{project.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/projects/add}" class="btn btn-primary ms-2">[[#{project.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${!projects.empty || filter != null}" class="row">
+                <div th:replace="~{fragments/utils::searchFilter(object='project')}" />
+                <div th:replace="~{fragments/utils::sorting(object='project', sortOptions=${ {'id,ASC', 'file,ASC', 'goal,ASC'} }, columnClass='offset-lg-4')}" />
+            </div>
+            <div th:if="${projects.empty}">[[#{project.list.empty}]]</div>
+            <div th:if="${!projects.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{project.id.label}]]</th>
+                            <th scope="col">[[#{project.file.label}]]</th>
+                            <th scope="col">[[#{project.name.label}]]</th>
+                            <th scope="col">[[#{project.status.label}]]</th>
+                            <th scope="col">[[#{project.user.label}]]</th>
+                            <th scope="col">[[#{project.progam.label}]]</th>
+                            <th scope="col">[[#{project.project1.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="project : ${projects}">
+                            <td>[[${project.id}]]</td>
+                            <td>[[${project.file}]]</td>
+                            <td>[[${project.name}]]</td>
+                            <td>[[${project.status}]]</td>
+                            <td>[[${project.user}]]</td>
+                            <td>[[${project.progam}]]</td>
+                            <td>[[${project.project1}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/projects/edit/{id}(id=${project.id})}" class="btn btn-sm btn-secondary">[[#{project.list.edit}]]</a>
+                                    <form th:action="@{/projects/delete/{id}(id=${project.id})}"
+                                            th:data-confirm-message="#{delete.confirm}" method="post" class="js-submit-confirm d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{project.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

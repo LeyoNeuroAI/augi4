@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{professional/loginLayout}">
+    <head>
+        <title>[[#{registration.register.headline}]]</title>
+          <script th:src="@{/js/terms.js}" defer></script>
+    </head>
+
+    <div layout:fragment="content">
+        <div th:replace="~{fragments/forms::globalErrors('registrationRequest')}" />
+
+
+        <div class="text-center mb-4">
+            <a href="." class="navbar-brand navbar-brand-autodark">
+                <img th:src="@{/images/logo.png}" th:alt="#{app.title}" width="110" height="32" class="navbar-brand-image">
+
+            </a>
+        </div>
+
+
+
+
+
+        <form class="card card-md" id="registrationForm" th:action="${requestUri}" method="post" autocomplete="off" novalidate th:object="${registrationRequest}">
+
+
+
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Create new account</h2>
+
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='name', required=true)}" />
+
+
+
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='email', required=true)}" />
+
+
+                <div class="row mb-3">
+
+                    <label for="password" class="col-md-3 col-form-label">
+                        <span>Password*</span>
+                    </label>
+                    <div class="col-md-9">
+                        <input type="password" class="form-control" th:field="*{password}" id="password" name="password" value="" />
+
+
+                       <div class="text-danger" style="font-size: 0.8em;">Password must be at least 8 characters long, 
+                        contain both letters and numbers and one Upper case letter
+                    </div>
+
+
+
+
+                    </div>
+                </div>
+              
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='organisation', required=true)}" />
+
+
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='refer')}" />
+
+
+
+
+
+
+
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='plan', required=true, type='select')}" />
+
+
+                <div th:replace="~{fragments/forms::inputRow(object='registrationRequest', field='country', required=true, type='select')}" />
+
+
+
+         <div class="row mb-3">
+            <div class="col-md-9 offset-md-2">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input"  th:field="*{terms} "id="terms1" name="terms" value="true" required /><input type="hidden" name="_terms" value="on"/>
+                    <label for="terms1" class="form-check-label">
+                           <div class="text-center text-secondary mt-3">
+                       Agree to <a href="/professional/terms" tabindex="-1" target="_blank">Terms and Conditions</a>
+                      </div>
+
+                    </label>
+                     
+
+
+             
+                     <span class="error-message" style="display: none; color: red;">You must accept the terms and conditions.</span>
+                </div>
+                
+            
+        
+            </div>
+            
+            
+        </div>
+            
+                <div class="form-footer">
+
+
+
+
+                    <button type="submit" th:text="#{registration.register.headline}" class="btn btn-primary w-100"></button>
+                </div>
+            </div>
+        </form>
+        <div class="text-center text-secondary mt-3">
+
+            Already have account? <a th:href="@{/professional/login}" tabindex="-1">Sign in</a>
+        </div>
+
+
+
+    </div>
+
+</html>

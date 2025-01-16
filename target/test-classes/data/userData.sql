@@ -1,0 +1,63 @@
+INSERT INTO "user" (
+    id,
+    email,
+    is_active,
+    name,
+    organisation,
+    password,
+    stripe_customer_id,
+    stripe_subscription_id,
+    subscription_status,
+    refer,
+    terms,
+    role_id,
+    date_created,
+    last_updated
+) VALUES (
+    2200,
+    'admin',
+    TRUE,
+    'Sed diam voluptua.',
+    'Commodo consequat.',
+    '{bcrypt}$2a$10$FMzmOkkfbApEWxS.4XzCKOR7EbbiwzkPEyGgYh6uQiPxurkpzRMa6',
+    'Sed diam nonumy.',
+    'Stet clita kasd.',
+    'Stet clita kasd.',
+    'Consectetuer adipiscing.',
+    TRUE,
+    2100,
+    '2024-09-02 14:30:00',
+    '2024-09-02 14:30:00'
+);
+
+INSERT INTO "user" (
+    id,
+    email,
+    is_active,
+    name,
+    organisation,
+    password,
+    stripe_customer_id,
+    stripe_subscription_id,
+    subscription_status,
+    refer,
+    terms,
+    role_id,
+    date_created,
+    last_updated
+) VALUES (
+    2201,
+    'professional',
+    FALSE,
+    'At vero eos.',
+    'Nulla facilisis.',
+    '{bcrypt}$2a$10$FMzmOkkfbApEWxS.4XzCKOR7EbbiwzkPEyGgYh6uQiPxurkpzRMa6',
+    'Sed diam voluptua.',
+    'No sea takimata.',
+    'No sea takimata.',
+    'Quis nostrud exerci.',
+    FALSE,
+    2101,
+    '2024-09-03 14:30:00',
+    '2024-09-03 14:30:00'
+);
