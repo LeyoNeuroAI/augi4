@@ -39,10 +39,10 @@ public class AdminSecurityConfig {
             @Value("${admin.rememberMeKey}") final String rememberMeKey,
             final AdminUserDetailsService adminUserDetailsService) throws Exception {
         return http.cors(withDefaults())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/actuator/**"))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/actuator/**", "/assistant/**"))
                 .authorizeHttpRequests(authorize -> authorize
                         
-                    .requestMatchers("/error",  "/admin/login", "/admin/register",  "/avatars/**", "/css/**", "/dist/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                    .requestMatchers("/error",  "/admin/login", "/admin/register", "/assistant/**",  "/avatars/**", "/css/**", "/dist/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                     .anyRequest().hasAuthority(UserRoles.ADMIN))
                 .authenticationManager(adminAuthenticationManager)
                 .formLogin(form -> form

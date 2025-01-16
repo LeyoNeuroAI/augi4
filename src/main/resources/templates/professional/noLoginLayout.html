@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">[[#{app.title}]]</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link th:href="@{/dist/css/tabler.min.css(1692870487)}" rel="stylesheet"/>
+        <link th:href="@{/dist/css/tabler-flags.min.css(1692870487)}" rel="stylesheet"/>
+        <link th:href="@{/dist/css/tabler-payments.min.css(1692870487)}" rel="stylesheet"/>
+        <link th:href="@{/dist/css/tabler-vendors.min.css(1692870487)}" rel="stylesheet"/>
+        <link th:href="@{/dist/css/demo.min.css(1692870487)}" rel="stylesheet"/>
+
+
+
+        <style>
+            @import url('https://rsms.me/inter/inter.css');
+            :root {
+                --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+            }
+            body {
+                font-feature-settings: "cv03", "cv04", "cv11";
+            }
+        </style>
+    </head>
+    <body  class=" d-flex flex-column">
+
+
+        <div class="page">
+
+            <!-- Navbar -->
+         <header class="navbar navbar-expand-md d-print-none" >
+                <div class="container-xl">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                        <a href=".">
+                            <img src="/images/logo.png" width="110" height="32" alt="NeuroSecure" class="navbar-brand-image">
+                        </a>
+                    </h1>
+                    
+
+
+
+                    
+                </div>
+            </header>
+
+            <!--- navbar end -->
+
+            <div class="page-wrapper">
+
+
+
+                <!-- Page body -->
+
+                <div class="page-body">
+
+
+
+                    <p th:if="${MSG_SUCCESS}" class="alert alert-success mb-4" role="alert">[[${MSG_SUCCESS}]]</p>
+                    <p th:if="${MSG_INFO}" class="alert alert-info mb-4" role="alert">[[${MSG_INFO}]]</p>
+                    <p th:if="${MSG_ERROR}" class="alert alert-danger mb-4" role="alert">[[${MSG_ERROR}]]</p>
+                    <div layout:fragment="content" />
+                    <script th:src="@{/dist/js/tabler.min.js(1692870487)}" defer></script>
+                </div>
+
+
+
+             
+
+        <footer class="footer footer-transparent d-print-none">
+            <div class="container-xl">
+                <div class="row text-center align-items-center flex-row-reverse">
+                    <div class="col-lg-auto ms-lg-auto">
+                        <ul class="list-inline list-inline-dots mb-0">
+
+
+                        </ul>
+                    </div>
+                    <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                        <ul class="list-inline list-inline-dots mb-0">
+                            <li class="list-inline-item">
+                                Copyright &copy; 2024-2025
+                                <a href="." class="link-secondary">IntelliBio B.V.</a>.
+                                All rights reserved.
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>                
+
+
+            
+            </div>
+            </body>
+</html>
