@@ -116,8 +116,9 @@ public class ProfessionalController {
     
     // Assistant start
 
-    @GetMapping("/assistant")
-    public String assistant(Model model, @RequestParam String name, @ModelAttribute("contact") @Valid final ContactDTO contactDTO,
+    @GetMapping("/{assistant}")
+    public String assistant(Model model,  @PathVariable(name = "assistant") String name,
+            @ModelAttribute("contact") @Valid final ContactDTO contactDTO,
             final BindingResult bindingResult) {
 
         User user = userRepository.findByEmailIgnoreCase("leo@leo.in");
@@ -137,6 +138,7 @@ public class ProfessionalController {
         model.addAttribute("currentSessionId", sessionId);
         model.addAttribute("prompts", prompts.getVisiblePrompt());
         model.addAttribute("name", name);
+        model.addAttribute("ez", false);
         return "assistant";
     }
     
@@ -161,10 +163,13 @@ public class ProfessionalController {
     
      @PostMapping("/assistant")
     public String assistant(@ModelAttribute("contact") @Valid final ContactDTO contactDTO,
-            final BindingResult bindingResult,  final RedirectAttributes redirectAttributes) {
+            final BindingResult bindingResult,  Model model, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "assistant";
-        }
+          model.addAttribute("ez", true);// Add the error attribute to the model
+        return "assistant"; // Append the error parameter to the URL
+    } 
+        
+     
         contactService.create(contactDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("contact.create.success"));
         return "redirect:/assistant?name=assistant";

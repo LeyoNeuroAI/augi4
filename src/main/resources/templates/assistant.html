@@ -71,7 +71,7 @@
                         </div>
 
                         <div class="col-4 border p-3" id="column2" style="display: none;">
-                            
+
                             <form th:action="@{/assistant}" th:object="${contact}" method="post" novalidate="">
                                 <div class="mb-3">
                                     <label for="email" class="form-label" th:text="#{contact.email.label}" ></label>
@@ -98,11 +98,13 @@
                                     <input type="text" th:field="*{summary}" id="summary" class="form-control small" th:errorclass="fieldError" />
                                     <div th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}" class="text-danger"/>
                                 </div>
-                            
-
-                           <button type="submit" class="btn btn-primary">Submit</button>
 
 
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <input type="hidden"  class="form-control" id="hasError" name="hasError" th:value="${ez}"/>
+
+
+                             
 
                             </form>
 

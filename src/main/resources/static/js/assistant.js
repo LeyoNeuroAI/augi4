@@ -1,13 +1,43 @@
 document.addEventListener('DOMContentLoaded', function () {
     const chatContainer = document.getElementById('chat-container');
-//const chatContainer = document.querySelector(".chat-bubbles");
+
     const messageInput = document.getElementById("message-input");
+    const toggleButton = document.getElementById('toggleButton');
+    const column2 = document.getElementById('column2');
+    const column3 = document.getElementById('column3');
     
-  const url = window.location.href;
+    
+  
+    
+    toggleButton.addEventListener('click', contact);
+      
+    
+    function contact () {
+        if (column2.style.display === 'none') {
+            column2.style.display = 'block';
+            column3.classList.remove('col-8');
+            column3.classList.add('col-4');
+        } else {
+            column2.style.display = 'none';
+            column3.classList.remove('col-4');
+            column3.classList.add('col-8');
+        }
+    }
+
+    const url = window.location.href;
 
 // Call the function to get the "DevGenius" value
-const geniusName = new URL(url).searchParams.get('name');
+    const parmas = new URL(url).searchParams;
+//    const geniusName = parmas.get('name');
     // Get the button element
+    
+    const geniusName = 'assistant';
+    
+     const hasError = document.getElementById('hasError');
+    
+    if (hasError && hasError.value === 'true') {
+        contact(); // Call your contact function when error exists
+    }
 
     const sessionInput = document.getElementById("sessionInput");
     let currentAssistantMessage = null;
@@ -19,13 +49,13 @@ const geniusName = new URL(url).searchParams.get('name');
 
     submitButton.addEventListener('click', sendMessage); // Add event listener
 
-   
-document.querySelectorAll('.custom-link').forEach(function(link) {
-    link.addEventListener('click', function(event) {
-        event.preventDefault();
-        window.location.href = this.href;
+
+    document.querySelectorAll('.custom-link').forEach(function (link) {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            window.location.href = this.href;
+        });
     });
-});
 
 
 
@@ -136,8 +166,8 @@ document.querySelectorAll('.custom-link').forEach(function(link) {
     }
 
     function sendMessage() {
-        
-        
+
+
         console.log(geniusName);
 
         const sessionId = sessionInput.value;
@@ -170,9 +200,9 @@ document.querySelectorAll('.custom-link').forEach(function(link) {
             if (!currentAssistantMessage.textContent) {
                 currentAssistantMessage.textContent = 'Error: Failed to get response';
                 console.log(error);
-                 console.log('Connection state:', eventSource.readyState);
-  console.log('Status:', event.target.status);
-  console.log('Headers:', event.target.getAllResponseHeaders());
+                console.log('Connection state:', eventSource.readyState);
+                console.log('Status:', event.target.status);
+                console.log('Headers:', event.target.getAllResponseHeaders());
             }
         };
     }
@@ -183,22 +213,10 @@ document.querySelectorAll('.custom-link').forEach(function(link) {
             sendMessage();
         }
     });
-    
-      const toggleButton = document.getElementById('toggleButton');
-        const column2 = document.getElementById('column2');
-        const column3 = document.getElementById('column3');
 
-        toggleButton.addEventListener('click', () => {
-            if (column2.style.display === 'none') {
-                column2.style.display = 'block';
-                column3.classList.remove('col-8');
-                column3.classList.add('col-4');
-            } else {
-                column2.style.display = 'none';
-                column3.classList.remove('col-4');
-                column3.classList.add('col-8');
-            }
-        });
+
+
+  
 }
 );
                 
