@@ -137,7 +137,7 @@ public class ProfessionalController {
         model.addAttribute("currentSessionId", sessionId);
         model.addAttribute("prompts", prompts.getVisiblePrompt());
         model.addAttribute("name", name);
-        return "professional/assistant";
+        return "assistant";
     }
     
     
@@ -163,7 +163,7 @@ public class ProfessionalController {
     public String assistant(@ModelAttribute("contact") @Valid final ContactDTO contactDTO,
             final BindingResult bindingResult,  final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "professional/assistant";
+            return "assistant";
         }
         contactService.create(contactDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("contact.create.success"));
