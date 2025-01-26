@@ -1,6 +1,7 @@
-# Augi4
+# Augi
 
-This app was created with Bootify.io - tips on working with the code [can be found here](https://bootify.io/next-steps/).
+
+A Claude 3 Based AI Agent for creating Grant Applications for European Biotech Researchers
 
 ## Development
 
@@ -8,35 +9,17 @@ Update your local database connection in `application.properties` or create your
 settings for development.
 
 During development it is recommended to use the profile `local`. In IntelliJ `-Dspring.profiles.active=local` can be
-added in the VM options of the Run Configuration after enabling this property in "Modify options".
 
-After starting the application it is accessible under `localhost:8080`.
-
-## Testing requirements
-
-To run the tests and build, [Docker](https://www.docker.com/get-started/) must be available on the current system. Due
-to the reuse flag, the container will not shut down after the tests. It can be stopped manually if needed.
 
 ## Build
 
 The application can be tested and built using the following command:
 
 ```
-mvnw clean package
+mvnw clean spring:boot run
 ```
 
-Start your application with the following command - here with the profile `production`:
 
-```
-java -Dspring.profiles.active=production -jar ./target/augi4-0.0.1-SNAPSHOT.jar
-```
-
-If required, a Docker image can be created with the Spring Boot plugin. Add `SPRING_PROFILES_ACTIVE=production` as
-environment variable when running the container.
-
-```
-mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=tech.intellibio/augi4
-```
 
 ## Further readings
 
